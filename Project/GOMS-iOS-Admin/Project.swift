@@ -37,6 +37,10 @@ let project = Project(
         .remote(
             url: "https://github.com/GSM-MSG/GAuthSignin-Swift",
             requirement: .upToNextMajor(from: "0.0.3")
+        ),
+        .remote(
+            url: "https://github.com/ReactorKit/ReactorKit.git",
+            requirement: .upToNextMajor(from: "3.0.0")
         )
     ],
     targets: [
@@ -62,7 +66,8 @@ let project = Project(
              .package(product: "Then"),
              .package(product: "Moya"),
              .package(product: "Kingfisher"),
-             .package(product: "GAuthSignin")
+             .package(product: "GAuthSignin"),
+             .package(product: "ReatorKit")
             ]
         )
     ]
