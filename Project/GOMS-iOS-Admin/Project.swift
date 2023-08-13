@@ -40,7 +40,7 @@ let project = Project(
         ),
         .remote(
             url: "https://github.com/ReactorKit/ReactorKit.git",
-            requirement: .upToNextMajor(from: "3.0.0")
+            requirement: .upToNextMajor(from: "3.2.0")
         )
     ],
     targets: [
@@ -67,7 +67,7 @@ let project = Project(
              .package(product: "Moya"),
              .package(product: "Kingfisher"),
              .package(product: "GAuthSignin"),
-             .package(product: "ReatorKit")
+             .package(product: "ReactorKit")
             ]
         )
     ]

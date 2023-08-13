@@ -17,8 +17,8 @@ class AuthFlow: Flow {
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step as? GOMSAdminStep else { return .none }
         switch step {
-//        case .introIsRequired:
-//            return coordinateToIntro()
+        case .introIsRequired:
+            return coordinateToIntro()
 //            
 //        case .tabBarIsRequired:
 //            return .end(forwardToParentFlowWithStep: GOMSAdminStep.tabBarIsRequired)
@@ -38,13 +38,13 @@ class AuthFlow: Flow {
     }
 }
 
-//private extension AuthFlow {
-//    func coordinateToIntro() -> FlowContributors {
-//        let vm = IntroViewModel()
-//        let vc = IntroViewController(vm)
-//        self.rootViewController.setViewControllers([vc], animated: false)
-//        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
-//    }
+private extension AuthFlow {
+    func coordinateToIntro() -> FlowContributors {
+        let vm = IntroViewModel()
+        let vc = IntroViewController(vm)
+        self.rootViewController.setViewControllers([vc], animated: false)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
 //
 //    func coordinateToLoginWithNumber() -> FlowContributors {
 //        let vm = LoginWithNumberViewModel()
@@ -70,4 +70,4 @@ class AuthFlow: Flow {
 //        self.rootViewController.topViewController?.present(alert, animated: true)
 //        return .none
 //    }
-//}
+}
