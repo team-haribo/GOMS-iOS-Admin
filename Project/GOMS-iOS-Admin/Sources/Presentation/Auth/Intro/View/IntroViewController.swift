@@ -21,7 +21,7 @@ class IntroViewController: BaseViewController<IntroViewModel> {
     }
     
     private let logoImage = UIImageView().then {
-        $0.image = UIImage(named: "colorLogo.svg")
+        $0.image = UIImage(named: "IntroLogo.svg")
     }
     
     private let explainText = UILabel().then {
