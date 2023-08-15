@@ -88,7 +88,7 @@ class IntroViewController: BaseViewController<IntroViewModel> {
             redirectURI: Bundle.module.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
             presenting: self
         ) { code in
-//            self.viewModel.gauthSignInCompleted(code: code)
+            self.viewModel.steps.accept(GOMSAdminStep.tabBarIsRequired)
         }
     }
     
