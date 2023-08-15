@@ -20,8 +20,8 @@ class AuthFlow: Flow {
         case .introIsRequired:
             return coordinateToIntro()
 //            
-//        case .tabBarIsRequired:
-//            return .end(forwardToParentFlowWithStep: GOMSAdminStep.tabBarIsRequired)
+        case .tabBarIsRequired:
+            return .end(forwardToParentFlowWithStep: GOMSAdminStep.tabBarIsRequired)
 //            
 //        case .loginWithNumberIsRequired:
 //            return coordinateToLoginWithNumber()

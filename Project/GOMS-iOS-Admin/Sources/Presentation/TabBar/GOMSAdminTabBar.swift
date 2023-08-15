@@ -23,7 +23,7 @@ final class GOMSAdminTabBarViewController: UITabBarController {
 private extension GOMSAdminTabBarViewController {
     func configureVC() {
         tabBar.tintColor = GOMSIOSAdminAsset.mainColor.color
-        tabBar.unselectedItemTintColor = GOMSIOSAdminAsset.mainColor.color
+        tabBar.unselectedItemTintColor = GOMSIOSAdminAsset.subColor.color
         tabBar.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.98)
     }
 }

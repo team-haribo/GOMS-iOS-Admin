@@ -54,19 +54,19 @@ private extension TabBarFlow {
                             root3: UINavigationController) in
             let homeItem = UITabBarItem(
                 title: "홈",
-                image: UIImage(named: "unselectedAdminHome.svg"),
-                selectedImage: UIImage(named: "selectedAdminHome.svg")
+                image: GOMSIOSAdminAsset.unselectedAdminHome.image,
+                selectedImage: GOMSIOSAdminAsset.selectedAdminHome.image
             )
             
             let qrCodeItem = UITabBarItem(
                 title: "외출하기",
-                image: UIImage(named: "unselectedAdminQRCode.svg"),
-                selectedImage: UIImage(named: "selectedAdminQRCode.svg")
+                image: GOMSIOSAdminAsset.unselectedAdminQRCode.image,
+                selectedImage: GOMSIOSAdminAsset.selectedAdminQRCode.image
             )
             let outingItem = UITabBarItem(
                 title: "외출현황",
-                image: UIImage(named: "unselectedAdminOuting.svg"),
-                selectedImage: UIImage(named: "selectedAdminOuting.svg")
+                image: GOMSIOSAdminAsset.unselectedAdminOuting.image,
+                selectedImage: GOMSIOSAdminAsset.selectedAdminOuting.image
             )
             root1.tabBarItem = homeItem
             root2.tabBarItem = qrCodeItem
