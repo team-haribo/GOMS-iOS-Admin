@@ -1,5 +1,7 @@
 import Foundation
 import UIKit
+import Then
+import SnapKit
 
 class HomeCollectionViewCell: UICollectionViewCell {
     static let identifier = "homeCell"
