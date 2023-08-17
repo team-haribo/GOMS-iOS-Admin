@@ -41,6 +41,10 @@ let project = Project(
         .remote(
             url: "https://github.com/ReactorKit/ReactorKit.git",
             requirement: .upToNextMajor(from: "3.2.0")
+        ),
+        .remote(
+            url: "https://github.com/marcosgriselli/ViewAnimator.git",
+            requirement: .upToNextMajor(from: "3.1.0")
         )
     ],
     targets: [
@@ -67,7 +71,8 @@ let project = Project(
              .package(product: "Moya"),
              .package(product: "Kingfisher"),
              .package(product: "GAuthSignin"),
-             .package(product: "ReactorKit")
+             .package(product: "ReactorKit"),
+             .package(product: "ViewAnimator")
             ]
         )
     ]
