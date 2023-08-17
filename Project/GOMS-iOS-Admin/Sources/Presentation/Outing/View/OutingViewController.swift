@@ -5,7 +5,7 @@ import GAuthSignin
 import RxCocoa
 import RxSwift
 
-class OutingViewController: BaseViewController<OutingViewModel> {
+class OutingViewController: BaseViewController<OutingReactor> {
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -26,7 +26,7 @@ class IntroReactor: Reactor, Stepper{
     }
     
     // MARK: - Init
-    init(initialState: State) {
+    init() {
         self.initialState = State()
     }
 }

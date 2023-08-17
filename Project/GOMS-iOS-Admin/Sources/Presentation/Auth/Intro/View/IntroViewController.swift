@@ -88,7 +88,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
             redirectURI: Bundle.module.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
             presenting: self
         ) { code in
-            self.viewModel.steps.accept(GOMSAdminStep.tabBarIsRequired)
+            self.reactor.steps.accept(GOMSAdminStep.tabBarIsRequired)
         }
     }
     

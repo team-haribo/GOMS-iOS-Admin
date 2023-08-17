@@ -9,7 +9,7 @@ class BaseViewController<T>: UIViewController {
     var disposeBag = DisposeBag()
     let bounds = UIScreen.main.bounds
     
-    init(reactor: T) {
+    init(_ reactor: T) {
         self.reactor = reactor
         super .init(nibName: nil, bundle: nil)
     }
