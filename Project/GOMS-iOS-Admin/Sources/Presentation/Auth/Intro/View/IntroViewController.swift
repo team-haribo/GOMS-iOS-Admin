@@ -5,19 +5,11 @@ import GAuthSignin
 import RxCocoa
 import RxSwift
 
-class IntroViewController: BaseViewController<IntroViewModel> {
+class IntroViewController: BaseViewController<IntroReactor> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         gauthButtonSetUp()
-        bindViewModel()
-    }
-    
-    private func bindViewModel() {
-        let input = IntroViewModel.Input(
-            loginWithNumberButtonTap: loginWithNumberButton.rx.tap.asObservable()
-        )
-        viewModel.transVC(input: input)
     }
     
     private let logoImage = UIImageView().then {
@@ -88,7 +80,7 @@ class IntroViewController: BaseViewController<IntroViewModel> {
             redirectURI: Bundle.module.object(forInfoDictionaryKey: "REDIREDCT_URI") as? String ?? "",
             presenting: self
         ) { code in
-            self.viewModel.steps.accept(GOMSAdminStep.tabBarIsRequired)
+            self.reactor.steps.accept(GOMSAdminStep.tabBarIsRequired)
         }
     }
     
@@ -133,6 +125,15 @@ class IntroViewController: BaseViewController<IntroViewModel> {
             $0.leading.equalTo(cannotLoginText.snp.trailing).offset(8)
             $0.height.equalTo(cannotLoginText.snp.height)
         }
+    }
+    
+    // MARK: - Reactor
+    
+    override func bind(reactor: IntroReactor) {
+        loginWithNumberButton.rx.tap
+            .map { IntroReactor.Action.loginWithNumberButtonTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 

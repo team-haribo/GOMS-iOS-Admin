@@ -2,14 +2,15 @@ import UIKit
 import RxCocoa
 import RxSwift
 import Then
+import ReactorKit
 
 class BaseViewController<T>: UIViewController {
-    let viewModel: T
+    let reactor: T
     var disposeBag = DisposeBag()
     let bounds = UIScreen.main.bounds
     
-    init(_ viewModel: T) {
-        self.viewModel = viewModel
+    init(_ reactor: T) {
+        self.reactor = reactor
         super .init(nibName: nil, bundle: nil)
     }
     
@@ -24,6 +25,7 @@ class BaseViewController<T>: UIViewController {
         self.navigationItem.backButtonTitle = ""
         addView()
         setLayout()
+        bind(reactor: reactor)
     }
     
     func addView() {
@@ -33,6 +35,8 @@ class BaseViewController<T>: UIViewController {
     func setLayout() {
         
     }
+    
+    func bind(reactor: T) {}
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)

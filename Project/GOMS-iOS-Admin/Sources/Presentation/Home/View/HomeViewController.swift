@@ -5,7 +5,7 @@ import SnapKit
 import RxSwift
 import Kingfisher
 
-class HomeViewController: BaseViewController<HomeViewModel> {
+class HomeViewController: BaseViewController<HomeReactor> {
     
     override func viewDidLoad() {
         super.viewDidLoad()

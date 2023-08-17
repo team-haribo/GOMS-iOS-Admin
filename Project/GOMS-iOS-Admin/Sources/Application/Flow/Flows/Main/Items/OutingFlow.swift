@@ -48,7 +48,7 @@ class OutingFlow: Flow {
     }
     
     private func coordinateToOuting() -> FlowContributors {
-        let vm = OutingViewModel()
+        let vm = OutingReactor()
         let vc = OutingViewController(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))

@@ -51,7 +51,7 @@ class QRCodeFlow: Flow {
     }
     
     private func coordinateToQRCode() -> FlowContributors {
-        let vm = QRCodeViewModel()
+        let vm = QRCodeReactor()
         let vc = QRCodeViewController(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))

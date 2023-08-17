@@ -5,7 +5,7 @@ import GAuthSignin
 import RxCocoa
 import RxSwift
 
-class QRCodeViewController: BaseViewController<QRCodeViewModel> {
+class QRCodeViewController: BaseViewController<QRCodeReactor> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
