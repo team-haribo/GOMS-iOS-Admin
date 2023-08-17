@@ -10,15 +10,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
     override func viewDidLoad() {
         super.viewDidLoad()
         gauthButtonSetUp()
-//        bindViewModel()
     }
-    
-//    private func bindViewModel() {
-//        let input = IntroViewModel.Input(
-//            loginWithNumberButtonTap: loginWithNumberButton.rx.tap.asObservable()
-//        )
-//        viewModel.transVC(input: input)
-//    }
     
     private let logoImage = UIImageView().then {
         $0.image = UIImage(named: "IntroLogo.svg")
@@ -133,6 +125,15 @@ class IntroViewController: BaseViewController<IntroReactor> {
             $0.leading.equalTo(cannotLoginText.snp.trailing).offset(8)
             $0.height.equalTo(cannotLoginText.snp.height)
         }
+    }
+    
+    // MARK: - Reactor
+    
+    override func bind(reactor: IntroReactor) {
+        loginWithNumberButton.rx.tap
+            .map { IntroReactor.Action.loginWithNumberButtonTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 

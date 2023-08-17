@@ -25,6 +25,7 @@ class BaseViewController<T>: UIViewController {
         self.navigationItem.backButtonTitle = ""
         addView()
         setLayout()
+        bind(reactor: reactor)
     }
     
     func addView() {
@@ -34,6 +35,8 @@ class BaseViewController<T>: UIViewController {
     func setLayout() {
         
     }
+    
+    func bind(reactor: T) {}
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
