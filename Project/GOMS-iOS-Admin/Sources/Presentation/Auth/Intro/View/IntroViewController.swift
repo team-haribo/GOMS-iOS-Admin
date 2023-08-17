@@ -5,20 +5,20 @@ import GAuthSignin
 import RxCocoa
 import RxSwift
 
-class IntroViewController: BaseViewController<IntroViewModel> {
+class IntroViewController: BaseViewController<IntroReactor> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         gauthButtonSetUp()
-        bindViewModel()
+//        bindViewModel()
     }
     
-    private func bindViewModel() {
-        let input = IntroViewModel.Input(
-            loginWithNumberButtonTap: loginWithNumberButton.rx.tap.asObservable()
-        )
-        viewModel.transVC(input: input)
-    }
+//    private func bindViewModel() {
+//        let input = IntroViewModel.Input(
+//            loginWithNumberButtonTap: loginWithNumberButton.rx.tap.asObservable()
+//        )
+//        viewModel.transVC(input: input)
+//    }
     
     private let logoImage = UIImageView().then {
         $0.image = UIImage(named: "IntroLogo.svg")
