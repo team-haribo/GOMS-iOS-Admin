@@ -72,8 +72,16 @@ private extension IntroReactor {
                 let statusCode = result.statusCode
                 switch statusCode{
                 case 200..<300:
-                    self.addKeychainToken()
-                    self.steps.accept(GOMSAdminStep.tabBarIsRequired)
+                    if self.authData?.authority == "ROLE_STUDENT_COUNCIL" {
+                        self.addKeychainToken()
+                        self.steps.accept(GOMSAdminStep.tabBarIsRequired)
+                    }
+                    else {
+                        self.steps.accept(GOMSAdminStep.failureAlert(
+                            title: "오류",
+                            message: "어드민 계정이 아닙니다."
+                        ))
+                    }
                 case 400:
                     self.steps.accept(GOMSAdminStep.failureAlert(
                         title: "오류",
