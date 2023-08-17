@@ -64,8 +64,8 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
         $0.layer.cornerRadius = 10
         $0.backgroundColor = UIColor(
             red: 1,
-            green: 139,
-            blue: 67,
+            green: 139/255,
+            blue: 67/255,
             alpha: 0.5
         )
         $0.isHidden = true
