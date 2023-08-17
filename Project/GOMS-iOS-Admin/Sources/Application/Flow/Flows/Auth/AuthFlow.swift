@@ -19,6 +19,9 @@ class AuthFlow: Flow {
         switch step {
         case .introIsRequired:
             return coordinateToIntro()
+            
+        case .splashIsRequired:
+            return coordinateToSplash()
 //            
         case .tabBarIsRequired:
             return .end(forwardToParentFlowWithStep: GOMSAdminStep.tabBarIsRequired)
@@ -51,6 +54,12 @@ private extension AuthFlow {
         let vc = LoginWithNumberViewController(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    func coordinateToSplash() -> FlowContributors {
+        let vc = SplashViewController()
+        self.rootViewController.setViewControllers([vc], animated: false)
+        return .one(flowContributor: .contribute(withNext: vc))
     }
 //
 //    func presentToAlert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction]) -> FlowContributors {

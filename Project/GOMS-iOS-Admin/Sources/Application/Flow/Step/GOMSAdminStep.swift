@@ -3,6 +3,9 @@ import UIKit
 
 enum GOMSAdminStep: Step {
     
+    //MARK: Splash
+    case splashIsRequired
+    
     // MARK: Auth
     case introIsRequired
     case loginWithNumberIsRequired

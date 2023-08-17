@@ -52,7 +52,7 @@ final class AppFlow: Flow {
         return .one(
             flowContributor: .contribute(
                 withNextPresentable: flow,
-                withNextStepper: OneStepper(withSingleStep: GOMSAdminStep.introIsRequired)
+                withNextStepper: OneStepper(withSingleStep: GOMSAdminStep.splashIsRequired)
         ))
     }
 
