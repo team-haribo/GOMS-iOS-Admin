@@ -45,6 +45,10 @@ let project = Project(
         .remote(
             url: "https://github.com/marcosgriselli/ViewAnimator.git",
             requirement: .upToNextMajor(from: "3.1.0")
+        ),
+        .remote(
+            url: "https://github.com/dmrschmidt/QRCode",
+            requirement: .upToNextMajor(from: "1.0.0")
         )
     ],
     targets: [
@@ -72,7 +76,8 @@ let project = Project(
              .package(product: "Kingfisher"),
              .package(product: "GAuthSignin"),
              .package(product: "ReactorKit"),
-             .package(product: "ViewAnimator")
+             .package(product: "ViewAnimator"),
+             .package(product: "QRCode")
             ]
         )
     ]
