@@ -4,15 +4,39 @@ import SnapKit
 import GAuthSignin
 import RxCocoa
 import RxSwift
+import QRCode
 
 class QRCodeViewController: BaseViewController<QRCodeReactor> {
     
     var timerLeft = 300
     
+    var urlUUID: UUID?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         startTimer()
+//        createQrCode()
     }
+    
+//    private func createQrCode() {
+//        var qrCode = QRCode(
+//            url: (
+//                URL(string: "\(BaseURL.baseURL)/outing/\(urlUUID)") ?? .init(string: "https://naver.com")!
+//            )
+//        )
+//        qrCode?.color = UIColor.black
+//        qrCode?.backgroundColor = GOMSIOSAdminAsset.background.color
+//        qrCode?.size = CGSize(width: 200, height: 200)
+//        qrCode?.scale = 1.0
+//        qrCode?.inputCorrection = .quartile
+//
+//        let qrImageView = UIImageView.init(qrCode: qrCode)
+//        self.view.addSubview(qrImageView)
+//        qrImageView.snp.makeConstraints {
+//            $0.height.width.equalTo(250)
+//            $0.center.equalTo(self.view.snp.center).offset(0)
+//        }
+//    }
     
     private func startTimer() {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (t) in
@@ -83,5 +107,21 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
             $0.top.equalTo(lastTimeText.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
         }
+    }
+    
+    override func bindAction(reactor: QRCodeReactor) {
+        self.rx.methodInvoked(#selector(viewWillAppear))
+            .map { _ in QRCodeReactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindState(reactor: QRCodeReactor) {
+        reactor.state
+            .map{ $0.uuid }
+            .distinctUntilChanged()
+            .map{ "\($0)" }
+            .bind(to: outingText.rx.text)
+            .disposed(by: disposeBag)
     }
 }
