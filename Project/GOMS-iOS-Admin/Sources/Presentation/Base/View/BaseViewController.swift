@@ -36,7 +36,15 @@ class BaseViewController<T>: UIViewController {
         
     }
     
-    func bind(reactor: T) {}
+    func bind(reactor: T) {
+        bindView(reactor: reactor)
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+    
+    func bindView(reactor: T) {}
+    func bindAction(reactor: T) {}
+    func bindState(reactor: T) {}
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
