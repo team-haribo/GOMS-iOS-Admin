@@ -5,7 +5,7 @@ import RxSwift
 import Moya
 import ReactorKit
 
-class HomeReactor: Reactor, Stepper{
+class ProfileReactor: Reactor, Stepper{
     // MARK: - Properties
     var initialState: State
     
@@ -14,7 +14,7 @@ class HomeReactor: Reactor, Stepper{
     // MARK: - Reactor
     
     enum Action {
-        case profileButtonDidTap
+        
     }
     
     enum Mutation {
@@ -32,19 +32,15 @@ class HomeReactor: Reactor, Stepper{
 }
 
 // MARK: - Mutate
-extension HomeReactor {
+extension ProfileReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .profileButtonDidTap:
-            return profileButtonDidTap()
+            
         }
     }
 }
 
 // MARK: - Method
-private extension HomeReactor {
-    func profileButtonDidTap() -> Observable<Mutation> {
-        self.steps.accept(GOMSAdminStep.profileIsRequired)
-        return .empty()
-    }
+private extension ProfileReactor {
+    
 }

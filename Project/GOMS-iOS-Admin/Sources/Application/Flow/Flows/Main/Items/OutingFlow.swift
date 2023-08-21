@@ -42,6 +42,9 @@ class OutingFlow: Flow {
         case let .failureAlert(title, message, action):
             return presentToFailureAlert(title: title, message: message, action: action)
             
+        case .profileIsRequired:
+            return coordinateToProfile()
+            
         default:
             return .none
         }
@@ -50,6 +53,13 @@ class OutingFlow: Flow {
     private func coordinateToOuting() -> FlowContributors {
         let vm = OutingReactor()
         let vc = OutingViewController(vm)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func coordinateToProfile() -> FlowContributors {
+        let vm = ProfileReactor()
+        let vc = ProfileViewController(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
