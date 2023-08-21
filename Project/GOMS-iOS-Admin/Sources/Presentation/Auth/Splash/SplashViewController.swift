@@ -8,7 +8,10 @@ import RxCocoa
 import RxSwift
 
 final class SplashViewController: UIViewController, Stepper {
+    
     var steps = PublishRelay<Step>()
+    
+    private let gomsRefreshToken = GOMSAdminRefreshToken.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +32,15 @@ final class SplashViewController: UIViewController, Stepper {
     
     private func navigateToLogin() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            self.steps.accept(GOMSAdminStep.introIsRequired)
+            self.gomsRefreshToken.autoLogin {
+                switch self.gomsRefreshToken.statusCode {
+                case 200..<300:
+                    self.steps.accept(GOMSAdminStep.tabBarIsRequired)
+                default:
+                    print(self.gomsRefreshToken.statusCode)
+                    self.steps.accept(GOMSAdminStep.introIsRequired)
+                }
+            }
         }
     }
     
