@@ -45,6 +45,9 @@ class QRCodeFlow: Flow {
         case let .failureAlert(title, message, action):
             return presentToFailureAlert(title: title, message: message, action: action)
             
+        case .profileIsRequired:
+            return coordinateToProfile()
+            
         default:
             return .none
         }
@@ -53,6 +56,13 @@ class QRCodeFlow: Flow {
     private func coordinateToQRCode() -> FlowContributors {
         let vm = QRCodeReactor()
         let vc = QRCodeViewController(vm)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func coordinateToProfile() -> FlowContributors {
+        let vm = ProfileReactor()
+        let vc = ProfileViewController(vm)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
