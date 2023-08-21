@@ -14,7 +14,7 @@ class HomeReactor: Reactor, Stepper{
     // MARK: - Reactor
     
     enum Action {
-        
+        case profileButtonDidTap
     }
     
     enum Mutation {
@@ -35,12 +35,16 @@ class HomeReactor: Reactor, Stepper{
 extension HomeReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-            
+        case .profileButtonDidTap:
+            return profileButtonDidTap()
         }
     }
 }
 
 // MARK: - Method
 private extension HomeReactor {
-    
+    func profileButtonDidTap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.profileIsRequired)
+        return .empty()
+    }
 }

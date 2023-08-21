@@ -14,7 +14,7 @@ class QRCodeReactor: Reactor, Stepper{
     // MARK: - Reactor
     
     enum Action {
-        
+        case profileButtonDidTap
     }
     
     enum Mutation {
@@ -36,11 +36,16 @@ extension QRCodeReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
             
+        case .profileButtonDidTap:
+            return profileButtonDidTap()
         }
     }
 }
 
 // MARK: - Method
 private extension QRCodeReactor {
-    
+    func profileButtonDidTap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.profileIsRequired)
+        return .empty()
+    }
 }

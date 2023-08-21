@@ -10,6 +10,8 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
     var timerLeft = 300
     
     override func viewDidLoad() {
+        self.navigationItem.rightBarButtonItem()
+        self.navigationItem.leftLogoImage()
         super.viewDidLoad()
         startTimer()
     }
@@ -83,5 +85,13 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
             $0.top.equalTo(lastTimeText.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
         }
+    }
+    // MARK: - Reactor
+    
+    override func bind(reactor: QRCodeReactor) {
+        navigationItem.rightBarButtonItem?.rx.tap
+            .map { QRCodeReactor.Action.profileButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }

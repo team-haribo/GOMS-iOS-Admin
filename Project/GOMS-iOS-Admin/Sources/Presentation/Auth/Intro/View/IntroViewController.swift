@@ -9,6 +9,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = true
         gauthButtonSetUp()
     }
     
