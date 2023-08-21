@@ -21,7 +21,7 @@ class BaseViewController<T>: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.tintColor = .black
-        view.backgroundColor = GOMSIOSAdminAsset.background.color
+        view.backgroundColor = GOMSAdminAsset.background.color
         self.navigationItem.backButtonTitle = ""
         addView()
         setLayout()

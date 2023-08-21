@@ -16,12 +16,12 @@ class ProfileTableViewCell: UITableViewCell {
     
     let cellName = UILabel().then {
         $0.textColor = .black
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 16)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 16)
     }
     
     let cellDetail = UILabel().then {
-        $0.textColor = GOMSIOSAdminAsset.subColor.color
-        $0.font = GOMSIOSAdminFontFamily.SFProText.regular.font(size: 14)
+        $0.textColor = GOMSAdminAsset.subColor.color
+        $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 14)
     }
     
     func addView() {

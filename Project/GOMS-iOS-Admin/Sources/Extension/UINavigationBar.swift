@@ -5,20 +5,20 @@ extension UINavigationItem {
     func rightBarButtonItem() {
         let profileButton = UIBarButtonItem().then {
             $0.image = UIImage(named: "profileIcon.svg")?.withRenderingMode(.alwaysTemplate)
-            $0.tintColor = GOMSIOSAdminAsset.mainColor.color
+            $0.tintColor = GOMSAdminAsset.mainColor.color
         }
         self.setRightBarButton(profileButton, animated: true)
     }
     
     func leftLogoImage() {
-        let customFont = GOMSIOSAdminFontFamily.Fraunces.black.font(size: 20)
+        let customFont = GOMSAdminFontFamily.Fraunces.black.font(size: 20)
         self.leftBarButtonItem = UIBarButtonItem(
             title: "GOMS",
             style: .plain,
             target: nil,
             action: nil
         ).then {
-            $0.tintColor = GOMSIOSAdminAsset.mainColor.color
+            $0.tintColor = GOMSAdminAsset.mainColor.color
             $0.setTitleTextAttributes(
                 [NSAttributedString.Key.font: customFont],
                 for: .normal

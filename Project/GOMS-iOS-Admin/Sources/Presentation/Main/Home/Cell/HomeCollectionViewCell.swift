@@ -25,13 +25,13 @@ class HomeCollectionViewCell: UICollectionViewCell {
     var studentName = UILabel().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.textColor = UIColor.black
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 14)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 14)
     }
     
     var studentNum = UILabel().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.textColor = GOMSIOSAdminAsset.subColor.color
-        $0.font = GOMSIOSAdminFontFamily.SFProText.regular.font(size: 12)
+        $0.textColor = GOMSAdminAsset.subColor.color
+        $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 12)
     }
     
     func addView() {

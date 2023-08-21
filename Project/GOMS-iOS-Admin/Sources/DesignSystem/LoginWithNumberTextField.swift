@@ -27,7 +27,7 @@ public final class LoginWithNumberTextField: UITextField {
             blur: 8,
             spread: 0
         )
-        self.font = GOMSIOSAdminFontFamily.SFProText.regular.font(size: 14)
+        self.font = GOMSAdminFontFamily.SFProText.regular.font(size: 14)
 
     }
     
@@ -35,7 +35,7 @@ public final class LoginWithNumberTextField: UITextField {
         let didBecomeFirstResponder = super.becomeFirstResponder()
         if didBecomeFirstResponder {
             self.layer.borderWidth = 1
-            self.layer.borderColor = GOMSIOSAdminAsset.mainColor.color.cgColor
+            self.layer.borderColor = GOMSAdminAsset.mainColor.color.cgColor
         }
         return didBecomeFirstResponder
     }
