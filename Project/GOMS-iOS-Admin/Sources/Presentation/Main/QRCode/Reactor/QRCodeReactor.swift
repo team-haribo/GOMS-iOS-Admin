@@ -23,6 +23,7 @@ class QRCodeReactor: Reactor, Stepper{
     
     enum Action {
         case viewDidLoad
+        case profileButtonDidTap
     }
     
     enum Mutation {
@@ -47,6 +48,8 @@ extension QRCodeReactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
+        case .profileButtonDidTap:
+            return profileButtonDidTap()
         }
     }
 }
@@ -120,4 +123,8 @@ private extension QRCodeReactor {
 //            return Observable.just(Mutation.createQRCode(uuid: createQRCodeData?.outingUUID))
 //        }
 //    }
+    func profileButtonDidTap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.profileIsRequired)
+        return .empty()
+    }
 }

@@ -13,6 +13,8 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
     var urlUUID: UUID?
     
     override func viewDidLoad() {
+        self.navigationItem.rightBarButtonItem()
+        self.navigationItem.leftLogoImage()
         super.viewDidLoad()
         startTimer()
 //        createQrCode()
@@ -122,6 +124,14 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
             .distinctUntilChanged()
             .map{ "\($0)" }
             .bind(to: outingText.rx.text)
+            .disposed(by: disposeBag)
+    }
+    // MARK: - Reactor
+    
+    override func bindView(reactor: QRCodeReactor) {
+        navigationItem.rightBarButtonItem?.rx.tap
+            .map { QRCodeReactor.Action.profileButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 }

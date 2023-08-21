@@ -8,9 +8,9 @@ import Kingfisher
 class HomeViewController: BaseViewController<HomeReactor> {
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         self.navigationItem.rightBarButtonItem()
         self.navigationItem.leftLogoImage()
+        super.viewDidLoad()
         tardyCollectionView.collectionViewLayout = layout
     }
     
@@ -197,6 +197,15 @@ class HomeViewController: BaseViewController<HomeReactor> {
             $0.centerY.equalTo(profileButton.snp.centerY).offset(0)
             $0.trailing.equalTo(profileButton.snp.trailing).inset(23)
         }
+    }
+    
+    // MARK: - Reactor
+    
+    override func bind(reactor: HomeReactor) {
+        navigationItem.rightBarButtonItem?.rx.tap
+            .map { HomeReactor.Action.profileButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 
