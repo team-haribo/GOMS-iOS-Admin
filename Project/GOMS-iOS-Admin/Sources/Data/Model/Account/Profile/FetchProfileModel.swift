@@ -1,10 +1,10 @@
 import Foundation
 
-struct ProfileModel: Codable {
-    let data: ProfileResponse
+struct FetchProfileModel: Codable {
+    let data: FetchProfileResponse
 }
 
-struct ProfileResponse: Codable {
+struct FetchProfileResponse: Codable {
     let accountIdx: UUID
     let name: String
     let studentNum: StudentNum
