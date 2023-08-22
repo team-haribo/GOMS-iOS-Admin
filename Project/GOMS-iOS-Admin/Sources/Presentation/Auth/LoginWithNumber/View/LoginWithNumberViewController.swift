@@ -13,14 +13,14 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
     
     private let loginWithNumberText = UILabel().then {
         $0.text = "로그인"
-        $0.font = GOMSIOSAdminFontFamily.SFProText.bold.font(size: 32)
+        $0.font = GOMSAdminFontFamily.SFProText.bold.font(size: 32)
         $0.textColor = UIColor.black
     }
     
     private let subText = UILabel().then {
         $0.text = "이메일로 인증번호가 발송됩니다."
-        $0.font = GOMSIOSAdminFontFamily.SFProText.regular.font(size: 16)
-        $0.textColor = GOMSIOSAdminAsset.subColor.color
+        $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 16)
+        $0.textColor = GOMSAdminAsset.subColor.color
     }
     
     private var emailTextField = LoginWithNumberTextField(
@@ -31,9 +31,9 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
     private var confirmationButton = UIButton().then {
         $0.setTitle("인증", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
-        $0.titleLabel?.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 14)
+        $0.titleLabel?.font = GOMSAdminFontFamily.SFProText.medium.font(size: 14)
         $0.layer.cornerRadius = 10
-        $0.backgroundColor = GOMSIOSAdminAsset.mainColor.color
+        $0.backgroundColor = GOMSAdminAsset.mainColor.color
         $0.layer.applySketchShadow(
             color: UIColor.black,
             alpha: 0.1,
@@ -60,7 +60,7 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
             UIColor.white,
             for: .normal
         )
-        $0.titleLabel?.font = GOMSIOSAdminFontFamily.SFProText.bold.font(size: 16)
+        $0.titleLabel?.font = GOMSAdminFontFamily.SFProText.bold.font(size: 16)
         $0.layer.cornerRadius = 10
         $0.backgroundColor = UIColor(
             red: 1,

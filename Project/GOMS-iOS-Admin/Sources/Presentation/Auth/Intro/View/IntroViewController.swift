@@ -19,14 +19,14 @@ class IntroViewController: BaseViewController<IntroReactor> {
     
     private let explainText = UILabel().then {
         $0.text = "간편한 수요 외출제 서비스"
-        $0.font = GOMSIOSAdminFontFamily.SFProText.bold.font(size: 20)
+        $0.font = GOMSAdminFontFamily.SFProText.bold.font(size: 20)
         $0.textColor = .black
         let fullText = $0.text ?? ""
         let attribtuedString = NSMutableAttributedString(string: fullText)
         let range = (fullText as NSString).range(of: "수요 외출제")
         attribtuedString.addAttribute(
             .foregroundColor,
-            value: GOMSIOSAdminAsset.mainColor.color,
+            value: GOMSAdminAsset.mainColor.color,
             range: range
         )
         $0.attributedText = attribtuedString
@@ -36,7 +36,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
         $0.text = "앱으로 간편하게 GSM의 \n수요 외출제를 이용해 보세요!"
         $0.numberOfLines = 2
         $0.textAlignment = .center
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 16)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 16)
         $0.textColor = UIColor(
             red: 121/255,
             green: 121/255,
@@ -49,7 +49,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
     
     private let cannotLoginText = UILabel().then {
         $0.text = "GAuth가 안된다면?"
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 12)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 12)
         $0.textColor = UIColor(
             red: 0,
             green: 0,
@@ -72,7 +72,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
             ),
             for: .normal
         )
-        $0.titleLabel?.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 12)
+        $0.titleLabel?.font = GOMSAdminFontFamily.SFProText.medium.font(size: 12)
     }
     
     private func gauthButtonSetUp() {

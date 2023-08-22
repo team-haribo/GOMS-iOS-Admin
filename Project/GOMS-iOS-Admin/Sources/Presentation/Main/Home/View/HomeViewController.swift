@@ -21,16 +21,16 @@ class HomeViewController: BaseViewController<HomeReactor> {
     private let homeMainText = UILabel().then {
         $0.text = "간편하게\n수요외출제를\n관리해보세요"
         $0.numberOfLines = 3
-        $0.font = GOMSIOSAdminFontFamily.SFProText.bold.font(size: 24)
+        $0.font = GOMSAdminFontFamily.SFProText.bold.font(size: 24)
         $0.textColor = .black
     }
     
     private lazy var useQRCodeButton = UIButton().then {
         $0.setTitle("생성하기", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
-        $0.titleLabel?.font = GOMSIOSAdminFontFamily.SFProText.bold.font(size: 14)
+        $0.titleLabel?.font = GOMSAdminFontFamily.SFProText.bold.font(size: 14)
         $0.layer.cornerRadius = 10
-        $0.backgroundColor = GOMSIOSAdminAsset.mainColor.color
+        $0.backgroundColor = GOMSAdminAsset.mainColor.color
     }
     
     private let outingButton = UIButton().then {
@@ -48,20 +48,20 @@ class HomeViewController: BaseViewController<HomeReactor> {
     
     private let totalStudentText = UILabel().then {
         $0.text = "현재 183명의 학생 중에서"
-        $0.textColor = GOMSIOSAdminAsset.subColor.color
-        $0.font = GOMSIOSAdminFontFamily.SFProText.regular.font(size: 12)
+        $0.textColor = GOMSAdminAsset.subColor.color
+        $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 12)
     }
     
     private lazy var outingStudentText = UILabel().then {
         $0.text = "0 명이 외출중이에요!"
         $0.textColor = UIColor.black
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 16)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 16)
         let fullText = $0.text ?? ""
         let attribtuedString = NSMutableAttributedString(string: fullText)
         let range = (fullText as NSString).range(of: "0")
         attribtuedString.addAttribute(
             .foregroundColor,
-            value: GOMSIOSAdminAsset.mainColor.color,
+            value: GOMSAdminAsset.mainColor.color,
             range: range
         )
         $0.attributedText = attribtuedString
@@ -79,7 +79,7 @@ class HomeViewController: BaseViewController<HomeReactor> {
             blue: 120/255,
             alpha: 1.00
         )
-        $0.font = GOMSIOSAdminFontFamily.SFProText.semibold.font(size: 20)
+        $0.font = GOMSAdminFontFamily.SFProText.semibold.font(size: 20)
     }
     
     private let layout = UICollectionViewFlowLayout().then {
@@ -99,7 +99,7 @@ class HomeViewController: BaseViewController<HomeReactor> {
         collectionViewLayout: UICollectionViewFlowLayout()
     ).then {
         $0.isScrollEnabled = false
-        $0.backgroundColor = GOMSIOSAdminAsset.background.color
+        $0.backgroundColor = GOMSAdminAsset.background.color
     }
     
     private let profileButton = UIButton().then {
@@ -117,14 +117,14 @@ class HomeViewController: BaseViewController<HomeReactor> {
     
     private lazy var subStudnetInfoText = UILabel().then {
         $0.text = "모든 학생들의 역할을 관리해보세요!"
-        $0.textColor = GOMSIOSAdminAsset.subColor.color
-        $0.font = GOMSIOSAdminFontFamily.SFProText.regular.font(size: 12)
+        $0.textColor = GOMSAdminAsset.subColor.color
+        $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 12)
     }
     
     private lazy var studnetInfoText = UILabel().then {
         $0.text = "학생 관리하기"
         $0.textColor = UIColor.black
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 16)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 16)
     }
     
     private let profileNavigationButton = UIImageView().then {
@@ -204,6 +204,14 @@ class HomeViewController: BaseViewController<HomeReactor> {
     override func bind(reactor: HomeReactor) {
         navigationItem.rightBarButtonItem?.rx.tap
             .map { HomeReactor.Action.profileButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        useQRCodeButton.rx.tap
+            .map { HomeReactor.Action.createQRCodeButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        outingButton.rx.tap
+            .map { HomeReactor.Action.outingButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

@@ -56,6 +56,7 @@ let project = Project(
             name: "GOMS-IOS-Admin",
             platform: .iOS,
             product: .app,
+            productName: "GOMS-Admin",
             bundleId: "io.tuist.GOMSIOSAdmin",
             deploymentTarget: .iOS(targetVersion: "15.0", devices: .iphone),
             infoPlist: "Support/Info.plist",

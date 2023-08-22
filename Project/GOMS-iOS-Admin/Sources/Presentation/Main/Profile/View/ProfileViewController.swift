@@ -39,14 +39,14 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
     
     private lazy var userNameText = UILabel().then {
         $0.text = "선민재"
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 18)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 18)
         $0.textColor = .black
     }
     
     private lazy var userNumText = UILabel().then {
         $0.text = "3111"
-        $0.font = GOMSIOSAdminFontFamily.SFProText.regular.font(size: 14)
-        $0.textColor = GOMSIOSAdminAsset.subColor.color
+        $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 14)
+        $0.textColor = GOMSAdminAsset.subColor.color
     }
     
     private var logoutButton = UIButton().then {
@@ -64,7 +64,7 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
     
     private let logoutText = UILabel().then {
         $0.text = "로그아웃"
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 14)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 14)
         $0.textColor = UIColor(
             red: 255 / 255,
             green: 126 / 255,
@@ -94,7 +94,7 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
             blur: 8,
             spread: 0
         )
-        $0.backgroundColor = GOMSIOSAdminAsset.background.color
+        $0.backgroundColor = GOMSAdminAsset.background.color
         $0.layer.cornerRadius = 20
         $0.layer.masksToBounds = false
     }

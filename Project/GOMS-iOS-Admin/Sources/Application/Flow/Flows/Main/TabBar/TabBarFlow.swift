@@ -26,13 +26,15 @@ final class TabBarFlow: Flow {
         
         switch step {
         case .tabBarIsRequired:
-            return coordinateToTabbar(index: 0)
+            return coordinateToTabbar()
             
         case .qrocdeIsRequired:
-            return coordinateToTabbar(index: 1)
+            rootVC.selectedIndex = 1
+            return .none
             
         case .outingIsRequired:
-            return coordinateToTabbar(index: 2)
+            rootVC.selectedIndex = 2
+            return .none
             
         case .introIsRequired:
             return .end(forwardToParentFlowWithStep: GOMSAdminStep.introIsRequired)
@@ -45,7 +47,7 @@ final class TabBarFlow: Flow {
 }
 
 private extension TabBarFlow {
-    func coordinateToTabbar(index: Int) -> FlowContributors {
+    func coordinateToTabbar() -> FlowContributors {
         Flows.use(
             homeFlow, qrCodeFlow, outingFlow,
             when: .ready
@@ -54,27 +56,25 @@ private extension TabBarFlow {
                             root3: UINavigationController) in
             let homeItem = UITabBarItem(
                 title: "홈",
-                image: GOMSIOSAdminAsset.unselectedAdminHome.image,
-                selectedImage: GOMSIOSAdminAsset.selectedAdminHome.image
+                image: GOMSAdminAsset.unselectedAdminHome.image,
+                selectedImage: GOMSAdminAsset.selectedAdminHome.image
             )
             
             let qrCodeItem = UITabBarItem(
                 title: "외출하기",
-                image: GOMSIOSAdminAsset.unselectedAdminQRCode.image,
-                selectedImage: GOMSIOSAdminAsset.selectedAdminQRCode.image
+                image: GOMSAdminAsset.unselectedAdminQRCode.image,
+                selectedImage: GOMSAdminAsset.selectedAdminQRCode.image
             )
             let outingItem = UITabBarItem(
                 title: "외출현황",
-                image: GOMSIOSAdminAsset.unselectedAdminOuting.image,
-                selectedImage: GOMSIOSAdminAsset.selectedAdminOuting.image
+                image: GOMSAdminAsset.unselectedAdminOuting.image,
+                selectedImage: GOMSAdminAsset.selectedAdminOuting.image
             )
             root1.tabBarItem = homeItem
             root2.tabBarItem = qrCodeItem
             root3.tabBarItem = outingItem
             
             self.rootVC.setViewControllers([root1,root2,root3], animated: true)
-            self.rootVC.selectedIndex = index
-
         }
         return .multiple(flowContributors: [
             .contribute(withNextPresentable: homeFlow, withNextStepper: OneStepper(withSingleStep: GOMSAdminStep.homeIsRequired)),

@@ -57,13 +57,13 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
     
     private let outingText = UILabel().then {
         $0.text = "외출하기"
-        $0.font = GOMSIOSAdminFontFamily.SFProText.bold.font(size: 22)
+        $0.font = GOMSAdminFontFamily.SFProText.bold.font(size: 22)
         $0.textColor = .black
     }
     
     private let explainText = UILabel().then {
         $0.text = "모바일 기기로\nQRCode를 스캔한 후 외출해주세요"
-        $0.font = GOMSIOSAdminFontFamily.SFProText.medium.font(size: 16)
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 16)
         $0.textColor = .black
         $0.numberOfLines = 2
         $0.textAlignment = .center
@@ -72,13 +72,13 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
     private let lastTimeText = UILabel().then {
         $0.text = "남은시간"
         $0.textColor = .black
-        $0.font = GOMSIOSAdminFontFamily.SFProText.bold.font(size: 16)
+        $0.font = GOMSAdminFontFamily.SFProText.bold.font(size: 16)
     }
     
     private let lastTimer = UILabel().then {
         $0.text = "5분 00초"
-        $0.textColor = GOMSIOSAdminAsset.mainColor.color
-        $0.font = GOMSIOSAdminFontFamily.SFProText.bold.font(size: 22)
+        $0.textColor = GOMSAdminAsset.mainColor.color
+        $0.font = GOMSAdminFontFamily.SFProText.bold.font(size: 22)
     }
     
     override func addView() {
