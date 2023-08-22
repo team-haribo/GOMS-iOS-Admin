@@ -206,6 +206,14 @@ class HomeViewController: BaseViewController<HomeReactor> {
             .map { HomeReactor.Action.profileButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        useQRCodeButton.rx.tap
+            .map { HomeReactor.Action.createQRCodeButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        outingButton.rx.tap
+            .map { HomeReactor.Action.outingButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 

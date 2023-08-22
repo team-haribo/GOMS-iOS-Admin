@@ -15,6 +15,8 @@ class HomeReactor: Reactor, Stepper{
     
     enum Action {
         case profileButtonDidTap
+        case createQRCodeButtonDidTap
+        case outingButtonDidTap
     }
     
     enum Mutation {
@@ -37,6 +39,10 @@ extension HomeReactor {
         switch action {
         case .profileButtonDidTap:
             return profileButtonDidTap()
+        case .createQRCodeButtonDidTap:
+            return createQRCodeButtonDidTap()
+        case .outingButtonDidTap:
+            return outingButtonDidTap()
         }
     }
 }
@@ -45,6 +51,16 @@ extension HomeReactor {
 private extension HomeReactor {
     func profileButtonDidTap() -> Observable<Mutation> {
         self.steps.accept(GOMSAdminStep.profileIsRequired)
+        return .empty()
+    }
+    
+    func createQRCodeButtonDidTap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.qrocdeIsRequired)
+        return .empty()
+    }
+    
+    func outingButtonDidTap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.outingIsRequired)
         return .empty()
     }
 }
