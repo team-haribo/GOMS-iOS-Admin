@@ -6,7 +6,7 @@ import RxCocoa
 import RxSwift
 import QRCode
 
-class QRCodeViewController: BaseViewController<QRCodeReactor> {
+class QRCodeViewController: BaseViewController<QRCodeReactor>{
     
     var timerLeft = 300
     
@@ -17,28 +17,28 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
         self.navigationItem.leftLogoImage()
         super.viewDidLoad()
         startTimer()
-//        createQrCode()
     }
     
-//    private func createQrCode() {
-//        var qrCode = QRCode(
-//            url: (
-//                URL(string: "\(BaseURL.baseURL)/outing/\(urlUUID)") ?? .init(string: "https://naver.com")!
-//            )
-//        )
-//        qrCode?.color = UIColor.black
-//        qrCode?.backgroundColor = GOMSIOSAdminAsset.background.color
-//        qrCode?.size = CGSize(width: 200, height: 200)
-//        qrCode?.scale = 1.0
-//        qrCode?.inputCorrection = .quartile
-//
-//        let qrImageView = UIImageView.init(qrCode: qrCode)
-//        self.view.addSubview(qrImageView)
-//        qrImageView.snp.makeConstraints {
-//            $0.height.width.equalTo(250)
-//            $0.center.equalTo(self.view.snp.center).offset(0)
-//        }
-//    }
+    func createQrCode() {
+        guard let uuid = urlUUID else { return }
+        var qrCode = QRCode(
+            url: (
+                URL(string: "\(BaseURL.baseURL)/outing/\(String(describing: uuid))") ?? .init(string: "https://naver.com")!
+            )
+        )
+        qrCode?.color = UIColor.black
+        qrCode?.backgroundColor = GOMSAdminAsset.background.color
+        qrCode?.size = CGSize(width: 200, height: 200)
+        qrCode?.scale = 1.0
+        qrCode?.inputCorrection = .quartile
+        
+        let qrImageView = UIImageView.init(qrCode: qrCode!)
+        self.view.addSubview(qrImageView)
+        qrImageView.snp.makeConstraints {
+            $0.height.width.equalTo(250)
+            $0.center.equalTo(self.view.snp.center).offset(0)
+        }
+    }
     
     private func startTimer() {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (t) in
@@ -122,8 +122,8 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
         reactor.state
             .map{ $0.uuid }
             .distinctUntilChanged()
-            .map{ "\($0)" }
-            .bind(to: outingText.rx.text)
+            .compactMap { $0 }
+            .bind(to: self.rx.urlUUID)
             .disposed(by: disposeBag)
     }
     // MARK: - Reactor
@@ -135,3 +135,5 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
             .disposed(by: disposeBag)
     }
 }
+
+
