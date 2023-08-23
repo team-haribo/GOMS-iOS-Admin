@@ -201,7 +201,14 @@ class HomeViewController: BaseViewController<HomeReactor> {
     
     // MARK: - Reactor
     
-    override func bind(reactor: HomeReactor) {
+    override func bindAction(reactor: HomeReactor) {
+        self.rx.methodInvoked(#selector(viewDidLoad))
+            .map { _ in HomeReactor.Action.fetchOutingCount }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindView(reactor: HomeReactor) {
         navigationItem.rightBarButtonItem?.rx.tap
             .map { HomeReactor.Action.profileButtonDidTap }
             .bind(to: reactor.action)
@@ -213,6 +220,14 @@ class HomeViewController: BaseViewController<HomeReactor> {
         outingButton.rx.tap
             .map { HomeReactor.Action.outingButtonDidTap }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindState(reactor: HomeReactor) {
+        reactor.state
+            .map{ $0.count }
+            .distinctUntilChanged()
+            .bind(to: outingStudentText.rx.outinCount)
             .disposed(by: disposeBag)
     }
 }
