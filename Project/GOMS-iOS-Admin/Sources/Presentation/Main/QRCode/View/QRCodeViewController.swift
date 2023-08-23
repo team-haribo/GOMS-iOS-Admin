@@ -4,16 +4,40 @@ import SnapKit
 import GAuthSignin
 import RxCocoa
 import RxSwift
+import QRCode
 
-class QRCodeViewController: BaseViewController<QRCodeReactor> {
+class QRCodeViewController: BaseViewController<QRCodeReactor>{
     
     var timerLeft = 300
+    
+    var urlUUID: UUID?
     
     override func viewDidLoad() {
         self.navigationItem.rightBarButtonItem()
         self.navigationItem.leftLogoImage()
         super.viewDidLoad()
         startTimer()
+    }
+    
+    func createQrCode() {
+        guard let uuid = urlUUID else { return }
+        var qrCode = QRCode(
+            url: (
+                URL(string: "\(BaseURL.baseURL)/outing/\(String(describing: uuid))") ?? .init(string: "https://naver.com")!
+            )
+        )
+        qrCode?.color = UIColor.black
+        qrCode?.backgroundColor = GOMSAdminAsset.background.color
+        qrCode?.size = CGSize(width: 200, height: 200)
+        qrCode?.scale = 1.0
+        qrCode?.inputCorrection = .quartile
+        
+        let qrImageView = UIImageView.init(qrCode: qrCode!)
+        self.view.addSubview(qrImageView)
+        qrImageView.snp.makeConstraints {
+            $0.height.width.equalTo(250)
+            $0.center.equalTo(self.view.snp.center).offset(0)
+        }
     }
     
     private func startTimer() {
@@ -86,12 +110,30 @@ class QRCodeViewController: BaseViewController<QRCodeReactor> {
             $0.centerX.equalToSuperview()
         }
     }
+    
+    override func bindAction(reactor: QRCodeReactor) {
+        self.rx.methodInvoked(#selector(viewWillAppear))
+            .map { _ in QRCodeReactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindState(reactor: QRCodeReactor) {
+        reactor.state
+            .map{ $0.uuid }
+            .distinctUntilChanged()
+            .compactMap { $0 }
+            .bind(to: self.rx.urlUUID)
+            .disposed(by: disposeBag)
+    }
     // MARK: - Reactor
     
-    override func bind(reactor: QRCodeReactor) {
+    override func bindView(reactor: QRCodeReactor) {
         navigationItem.rightBarButtonItem?.rx.tap
             .map { QRCodeReactor.Action.profileButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
 }
+
+
