@@ -18,13 +18,11 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
     
     private let cellName = ["이름","학년","반","번호","지각횟수"]
     
-    private let cellDetail = ["선민재","3","1","11","14"]
+    var cellDetail = ["선민재","3","1","11","14"]
     
     override func viewDidLoad() {
         self.tabBarController?.tabBar.isHidden = true
         super.viewDidLoad()
-        userInfoTableView.delegate = self
-        userInfoTableView.dataSource = self
         userInfoTableView.layer.cornerRadius = 20
         userInfoTableView.layer.masksToBounds = true
     }
@@ -33,17 +31,19 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
         self.tabBarController?.tabBar.isHidden = false
     }
     
-    private lazy var profileImage = UIImageView().then {
+    var profileImage = UIImageView().then {
         $0.image = UIImage(named: "DummyProfile.svg")
+        $0.layer.cornerRadius = 50
+        $0.layer.masksToBounds = true
     }
     
-    private lazy var userNameText = UILabel().then {
+    var userNameText = UILabel().then {
         $0.text = "선민재"
         $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 18)
         $0.textColor = .black
     }
     
-    private lazy var userNumText = UILabel().then {
+    var userNumText = UILabel().then {
         $0.text = "3111"
         $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 14)
         $0.textColor = GOMSAdminAsset.subColor.color
@@ -77,8 +77,7 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
         $0.image = UIImage(named: "logoutIcon.svg")
     }
     
-    private let userInfoTableView = UITableView().then {
-        $0.register(ProfileTableViewCell.self, forCellReuseIdentifier: "ProfileTableViewCell")
+    let userInfoTableView = UITableView().then {
         $0.separatorStyle = .singleLine
         $0.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         $0.isScrollEnabled = false
@@ -100,7 +99,16 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
     }
     
     override func addView() {
-        [profileImage, userNameText, userNumText, backgroundShadow, userInfoTableView, logoutButton, logoutText, logoutIcon].forEach {
+        [
+            profileImage,
+            userNameText,
+            userNumText,
+            backgroundShadow,
+            userInfoTableView,
+            logoutButton,
+            logoutText,
+            logoutIcon
+        ].forEach {
             view.addSubview($0)
         }
     }
@@ -144,6 +152,20 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
             $0.centerY.equalTo(logoutButton.snp.centerY).offset(0)
             $0.trailing.equalTo(logoutButton.snp.trailing).inset(24)
         }
+    }
+    
+    override func bindAction(reactor: ProfileReactor) {
+        self.rx.methodInvoked(#selector(viewWillAppear))
+            .map { _ in ProfileReactor.Action.viewWillAppear }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindState(reactor: ProfileReactor) {
+        reactor.state
+            .map { $0.userData }
+            .bind(to: self.rx.cellDetail)
+            .disposed(by: disposeBag)
     }
 }
 
