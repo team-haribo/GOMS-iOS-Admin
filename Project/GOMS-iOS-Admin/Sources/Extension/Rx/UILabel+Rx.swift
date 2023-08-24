@@ -1,4 +1,3 @@
-import QRCode
 import RxSwift
 import RxCocoa
 import UIKit
