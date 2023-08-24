@@ -99,6 +99,7 @@ class HomeViewController: BaseViewController<HomeReactor> {
         collectionViewLayout: UICollectionViewFlowLayout()
     ).then {
         $0.isScrollEnabled = false
+        $0.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: "homeCell")
         $0.backgroundColor = GOMSAdminAsset.background.color
     }
     
@@ -201,7 +202,18 @@ class HomeViewController: BaseViewController<HomeReactor> {
     
     // MARK: - Reactor
     
-    override func bind(reactor: HomeReactor) {
+    override func bindAction(reactor: HomeReactor) {
+        self.rx.methodInvoked(#selector(viewWillAppear))
+            .map { _ in HomeReactor.Action.fetchOutingCount }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        self.rx.methodInvoked(#selector(viewWillAppear))
+            .map { _ in HomeReactor.Action.fetchLateRank }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindView(reactor: HomeReactor) {
         navigationItem.rightBarButtonItem?.rx.tap
             .map { HomeReactor.Action.profileButtonDidTap }
             .bind(to: reactor.action)
@@ -215,38 +227,33 @@ class HomeViewController: BaseViewController<HomeReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
-}
-
-extension HomeViewController :
-    UICollectionViewDelegate,
-    UICollectionViewDelegateFlowLayout,
-    UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifier, for: indexPath) as? HomeCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        cell.backgroundColor = .white
-        cell.layer.cornerRadius = 10
-        cell.layer.applySketchShadow(
-            color: UIColor.black,
-            alpha: 0.1,
-            x: 0,
-            y: 2,
-            blur: 8,
-            spread: 0
-        )
-        cell.studentName.text = "선민재"
-        cell.studentNum.text = "3111"
-        cell.userProfileImage.image = UIImage(named: "userDummyImage.svg")!
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: ((bounds.width) / 3.87), height: ((bounds.height) / 6.76))
+    override func bindState(reactor: HomeReactor) {
+        reactor.state
+            .map{ $0.count }
+            .distinctUntilChanged()
+            .bind(to: outingStudentText.rx.outingCount)
+            .disposed(by: disposeBag)
+        reactor.state
+            .map { $0.lateRank }
+            .bind(
+                to: tardyCollectionView.rx.items(cellIdentifier: "homeCell", cellType: HomeCollectionViewCell.self)
+            ) { ip, item, cell in
+                cell.backgroundColor = .white
+                cell.layer.cornerRadius = 10
+                cell.layer.applySketchShadow(
+                    color: UIColor.black,
+                    alpha: 0.1,
+                    x: 0,
+                    y: 2,
+                    blur: 8,
+                    spread: 0
+                )
+                let url = URL(string: item.profileUrl ?? "")
+                cell.userProfileImage.kf.setImage(with: url, placeholder: UIImage(named: "DummyImage.svg"))
+                cell.studentName.text = item.name
+                cell.studentNum.text = "\(item.studentNum.grade)\(item.studentNum.classNum)\(item.studentNum.number)"
+            }.disposed(by: disposeBag)
+        
     }
 }

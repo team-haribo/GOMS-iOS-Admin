@@ -129,8 +129,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
     }
     
     // MARK: - Reactor
-    
-    override func bind(reactor: IntroReactor) {
+    override func bindAction(reactor: IntroReactor) {
         loginWithNumberButton.rx.tap
             .map { IntroReactor.Action.loginWithNumberButtonTap }
             .bind(to: reactor.action)

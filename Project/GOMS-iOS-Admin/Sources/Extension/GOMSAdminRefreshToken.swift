@@ -8,7 +8,7 @@ class GOMSAdminRefreshToken {
     static let shared = GOMSAdminRefreshToken()
     var steps = PublishRelay<Step>()
     var statusCode: Int = 0
-    private let authProvider = MoyaProvider<AuthServices>()
+    private let authProvider = MoyaProvider<AuthServices>(plugins: [NetworkLoggerPlugin()])
     private var reissuanceData: SignInResponse?
     private let keychain = Keychain()
     private lazy var refreshToken = "Bearer " + (keychain.read(key: Const.KeychainKey.refreshToken) ?? "")
