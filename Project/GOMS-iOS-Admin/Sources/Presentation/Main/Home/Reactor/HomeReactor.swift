@@ -11,7 +11,11 @@ class HomeReactor: Reactor, Stepper{
     
     var steps: PublishRelay<Step> = .init()
     
-    let outingProvider = MoyaProvider<OutingServices>()
+    let outingProvider = MoyaProvider<OutingServices>(plugins: [NetworkLoggerPlugin()])
+    
+    let lateProvider = MoyaProvider<LateServices>(plugins: [NetworkLoggerPlugin()])
+    
+    var lateRank: [FetchLateRankResponse] = []
     
     var outingCount: OutingCountResponse = .init(outingCount: 0)
         
@@ -28,14 +32,17 @@ class HomeReactor: Reactor, Stepper{
         case createQRCodeButtonDidTap
         case outingButtonDidTap
         case fetchOutingCount
+        case fetchLateRank
     }
     
     enum Mutation {
         case fetchOutingCount(count: Int)
+        case fetchLateRank(lateRank: [FetchLateRankResponse])
     }
     
     struct State {
         var count: Int = 0
+        var lateRank: [FetchLateRankResponse] = []
     }
     
     // MARK: - Init
@@ -56,6 +63,8 @@ extension HomeReactor {
             return outingButtonDidTap()
         case .fetchOutingCount:
             return fetchOutingCount()
+        case .fetchLateRank:
+            return fetchLateRank()
         }
     }
 }
@@ -66,6 +75,8 @@ extension HomeReactor {
         switch mutation {
         case let .fetchOutingCount(count):
             newState.count = count
+        case let .fetchLateRank(lateRank):
+            newState.lateRank = lateRank
         }
         return newState
     }
@@ -104,6 +115,37 @@ private extension HomeReactor {
                         observer.onNext(Mutation.fetchOutingCount(
                             count: self.outingCount.outingCount
                         ))
+                    case 401:
+                        self.gomsAdminRefreshToken.tokenReissuance()
+                        self.steps.accept(GOMSAdminStep.failureAlert(
+                            title: "오류",
+                            message: "작업을 한 번 더 시도해주세요"
+                        ))
+                    default:
+                        print("ERROR")
+                    }
+                case let .failure(err):
+                    observer.onError(err)
+                }
+            }
+            return Disposables.create()
+        }
+    }
+    
+    func fetchLateRank() -> Observable<Mutation> {
+        return Observable.create { observer in
+            self.lateProvider.request(.fetchLateRank(authorization: self.accessToken)) { result in
+                switch result {
+                case let .success(res):
+                    do {
+                        self.lateRank = try res.map([FetchLateRankResponse].self)
+                    }catch(let err) {
+                        print(String(describing: err))
+                    }
+                    let statusCode = res.statusCode
+                    switch statusCode{
+                    case 200..<300:
+                        observer.onNext(Mutation.fetchLateRank(lateRank: self.lateRank))
                     case 401:
                         self.gomsAdminRefreshToken.tokenReissuance()
                         self.steps.accept(GOMSAdminStep.failureAlert(

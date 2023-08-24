@@ -10,7 +10,7 @@ class IntroReactor: Reactor, Stepper{
     
     let keychain = Keychain()
     
-    let authProvider = MoyaProvider<AuthServices>()
+    let authProvider = MoyaProvider<AuthServices>(plugins: [NetworkLoggerPlugin()])
     
     var initialState: State
     

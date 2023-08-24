@@ -4,7 +4,7 @@ import RxCocoa
 import UIKit
 
 extension Reactive where Base: UILabel {
-    var outinCount: Binder<Int> {
+    var outingCount: Binder<Int> {
         Binder(base) { label, outingCount in
             label.text = "\(outingCount) 명이 외출중이에요!"
             label.textColor = UIColor.black
