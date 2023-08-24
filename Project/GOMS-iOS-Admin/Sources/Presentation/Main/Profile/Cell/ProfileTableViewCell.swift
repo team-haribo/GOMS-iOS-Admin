@@ -3,6 +3,7 @@ import Then
 import SnapKit
 
 class ProfileTableViewCell: UITableViewCell {
+    static let identifier = "profileCell"
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
