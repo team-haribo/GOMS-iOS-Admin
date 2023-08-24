@@ -1,3 +1,11 @@
+//
+//  SearchMadalReactor.swift
+//  GOMS-IOS-Admin
+//
+//  Created by 신아인 on 2023/08/24.
+//  Copyright © 2023 HARIBO. All rights reserved.
+//
+
 import Foundation
 import RxFlow
 import RxCocoa
@@ -5,7 +13,7 @@ import RxSwift
 import Moya
 import ReactorKit
 
-class StudentInfoReactor: Reactor, Stepper{
+class SearchModalReactor: Reactor, Stepper{
     // MARK: - Properties
     var initialState: State
     
@@ -14,7 +22,7 @@ class StudentInfoReactor: Reactor, Stepper{
     // MARK: - Reactor
     
     enum Action {
-        case searchTextFieldDidTap
+        
     }
     
     enum Mutation {
@@ -32,20 +40,17 @@ class StudentInfoReactor: Reactor, Stepper{
 }
 
 // MARK: - Mutate
-extension StudentInfoReactor {
+extension SearchModalReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .searchTextFieldDidTap:
-            return searchTextFieldDidTap()
+        
         }
     }
 }
 
 // MARK: - Method
-private extension StudentInfoReactor {
-    func searchTextFieldDidTap() -> Observable<Mutation> {
-        self.steps.accept(GOMSAdminStep.searchTextFieldIsRequired)
-        return .empty()
-    }
+private extension SearchModalReactor {
+    
 }
+
 

@@ -53,6 +53,9 @@ class HomeFlow: Flow {
         case .studentInfoIsRequired:
             return coordinateToStudentInfo()
             
+        case .searchTextFieldIsRequired:
+            return coordinateToSearchModal()
+            
         default:
             return .none
         }
@@ -76,6 +79,16 @@ class HomeFlow: Flow {
         let vm = StudentInfoReactor()
         let vc = StudentInfoViewController(vm)
         self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func coordinateToSearchModal() -> FlowContributors {
+        let vm = SearchModalReactor()
+        let vc = SearchModalViewController(vm)
+        
+        let navController = UINavigationController(rootViewController: vc)
+        navController.modalPresentationStyle = .custom
+        self.rootViewController.present(navController, animated: true, completion: nil)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     

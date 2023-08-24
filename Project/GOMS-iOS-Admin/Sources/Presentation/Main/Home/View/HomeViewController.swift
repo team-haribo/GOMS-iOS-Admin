@@ -226,6 +226,10 @@ class HomeViewController: BaseViewController<HomeReactor> {
             .map { HomeReactor.Action.outingButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        studentManagementButton.rx.tap
+            .map { HomeReactor.Action.studentInfoButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     override func bindState(reactor: HomeReactor) {
