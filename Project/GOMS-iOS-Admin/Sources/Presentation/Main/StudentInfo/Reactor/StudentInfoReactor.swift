@@ -14,7 +14,7 @@ class StudentInfoReactor: Reactor, Stepper{
     // MARK: - Reactor
     
     enum Action {
-        case searchTextFieldDidTap
+        case searchButtonDidTap
     }
     
     enum Mutation {
@@ -35,17 +35,17 @@ class StudentInfoReactor: Reactor, Stepper{
 extension StudentInfoReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .searchTextFieldDidTap:
-            return searchTextFieldDidTap()
+        case .searchButtonDidTap:
+            return searchButtonDidTap()
         }
     }
 }
 
+
 // MARK: - Method
 private extension StudentInfoReactor {
-    func searchTextFieldDidTap() -> Observable<Mutation> {
-        self.steps.accept(GOMSAdminStep.searchTextFieldIsRequired)
+    func searchButtonDidTap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.searchButtonIsRequired)
         return .empty()
     }
 }
-

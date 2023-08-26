@@ -53,7 +53,7 @@ class HomeFlow: Flow {
         case .studentInfoIsRequired:
             return coordinateToStudentInfo()
             
-        case .searchTextFieldIsRequired:
+        case .searchButtonIsRequired:
             return coordinateToSearchModal()
             
         default:
@@ -82,13 +82,16 @@ class HomeFlow: Flow {
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     
-    private func coordinateToSearchModal() -> FlowContributors {
+    private func coordinateToSearchModal() -> FlowContributors{
         let vm = SearchModalReactor()
         let vc = SearchModalViewController(vm)
-        
-        let navController = UINavigationController(rootViewController: vc)
-        navController.modalPresentationStyle = .custom
-        self.rootViewController.present(navController, animated: true, completion: nil)
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.largestUndimmedDetentIdentifier = .large
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.preferredCornerRadius = 20
+        }
+        self.rootViewController.topViewController?.present(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     

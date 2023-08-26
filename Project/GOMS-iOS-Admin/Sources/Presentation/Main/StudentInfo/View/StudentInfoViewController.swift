@@ -40,25 +40,14 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     override func viewWillDisappear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
     }
-        
-    private let searchTextField = UITextField().then {
-        let imageView = UIImageView(image: UIImage(named: "Search"))
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: imageView.frame.size.width + 20, height: imageView.frame.size.height))
-        paddingView.addSubview(imageView)
-        
-        let placeholderText = "찾으시는 학생이 있으신가요?"
-        let placeholderAttributes: [NSAttributedString.Key: Any] = [
-            .font: GOMSAdminFontFamily.SFProText.regular.font(size: 14)
-        ]
-        $0.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: placeholderAttributes)
-        $0.leftPadding(width: 20)
-        $0.textColor = .black
-        $0.layer.cornerRadius = 10
+    
+    private var searchButton = UIButton().then {
+        $0.setTitle("찾으시는 학생이 있으신가요?", for: .normal)
+        $0.titleLabel?.font = GOMSAdminFontFamily.SFProText.regular.font(size: 14)
+        $0.setTitleColor(GOMSAdminAsset.subColor.color, for: .normal)
+        $0.contentHorizontalAlignment = .leading
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 120)
         $0.backgroundColor = .white
-        
-        $0.rightView = paddingView
-        $0.rightViewMode = .always
-        
         $0.layer.applySketchShadow(
             color: UIColor.black,
             alpha: 0.1,
@@ -67,6 +56,11 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
             blur: 8,
             spread: 0
         )
+        $0.layer.cornerRadius = 10
+    }
+    
+    private let searchIcon = UIImageView().then {
+        $0.image = UIImage(named: "Search")
     }
     
     private let layout = UICollectionViewFlowLayout().then {
@@ -87,19 +81,23 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     }
     
     override func addView() {
-        [searchTextField, studentInfoCollectionView].forEach {
+        [searchButton, searchIcon, studentInfoCollectionView].forEach {
             view.addSubview($0)
         }
     }
     
     override func setLayout() {
-        searchTextField.snp.makeConstraints {
+        searchButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(26)
             $0.leading.trailing.equalToSuperview().inset(26)
             $0.height.equalTo(55)
         }
+        searchIcon.snp.makeConstraints {
+            $0.centerY.equalTo(searchButton)
+            $0.trailing.equalTo(searchButton.snp.trailing).inset(20)
+        }
         studentInfoCollectionView.snp.makeConstraints {
-            $0.top.equalTo(searchTextField.snp.bottom).offset(30)
+            $0.top.equalTo(searchButton.snp.bottom).offset(30)
             $0.leading.trailing.equalToSuperview().inset(26)
             $0.bottom.equalToSuperview()
         }
@@ -108,10 +106,14 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     // MARK: - Reactor
     
     override func bind(reactor: StudentInfoReactor) {
-        searchTextField.rx.controlEvent(.editingDidBegin)
-            .map { StudentInfoReactor.Action.searchTextFieldDidTap }
+        searchButton.rx.tap
+            .map { StudentInfoReactor.Action.searchButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+//        reactor.state
+//            .map { $0.userData }
+//            .bind(to: self.rx.userData)
+//            .disposed(by: disposeBag)
     }
 }
 
