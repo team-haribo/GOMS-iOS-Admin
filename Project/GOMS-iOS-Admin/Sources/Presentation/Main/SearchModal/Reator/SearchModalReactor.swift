@@ -22,15 +22,16 @@ class SearchModalReactor: Reactor, Stepper{
     // MARK: - Reactor
     
     enum Action {
-        
+        case resetButtonDidTap
     }
     
     enum Mutation {
-        
+        case resetButtons
+        case resetSegmentedControls(Bool)
     }
     
     struct State {
-        
+        var resetSegmentedControls: Bool = false
     }
     
     // MARK: - Init
@@ -43,8 +44,27 @@ class SearchModalReactor: Reactor, Stepper{
 extension SearchModalReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        
+        case .resetButtonDidTap:
+            return .concat([
+                .just(.resetSegmentedControls(true)),
+                .just(.resetButtons)
+            ])
         }
+    }
+}
+
+// MARK: - Reduce
+extension SearchModalReactor {
+    func reduce(state: State, mutation: Mutation) -> State {
+        var newState = state
+        switch mutation {
+        case .resetSegmentedControls(let shouldReset):
+            newState.resetSegmentedControls = shouldReset
+        case .resetButtons:
+            newState.resetSegmentedControls = false
+        }
+        
+        return newState
     }
 }
 
