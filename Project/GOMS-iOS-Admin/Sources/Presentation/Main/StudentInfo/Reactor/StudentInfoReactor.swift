@@ -81,7 +81,7 @@ private extension StudentInfoReactor {
                 case let .success(res):
                     do {
                         self.studentList = try res.map([StudentListResponse].self)
-                        print("Fetched student list: \(self.studentList)")
+                        //print("Fetched student list: \(self.studentList)")
                     }catch(let err) {
                         print(String(describing: err))
                     }

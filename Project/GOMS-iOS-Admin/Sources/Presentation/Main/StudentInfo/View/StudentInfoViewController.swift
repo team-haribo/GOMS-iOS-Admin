@@ -69,7 +69,7 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         collectionViewLayout: UICollectionViewFlowLayout()
     ).then {
         $0.isScrollEnabled = true
-        $0.register(StudentInfoCollectionViewCell.self, forCellWithReuseIdentifier: "studentCell")
+        $0.register(StudentInfoCollectionViewCell.self, forCellWithReuseIdentifier: StudentInfoCollectionViewCell.identifier)
         $0.backgroundColor = GOMSAdminAsset.background.color
     }
     
@@ -98,13 +98,16 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     
     // MARK: - Reactor
     
-    override func bind(reactor: StudentInfoReactor) {
-        self.rx.methodInvoked(#selector(viewWillAppear))
-            .map { _ in StudentInfoReactor.Action.fetchStudentList }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+    override func bindView(reactor: StudentInfoReactor) {
         searchButton.rx.tap
             .map { StudentInfoReactor.Action.searchButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindAction(reactor: StudentInfoReactor) {
+        self.rx.methodInvoked(#selector(viewWillAppear))
+            .map { _ in StudentInfoReactor.Action.fetchStudentList }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -126,9 +129,9 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
                     spread: 0
                 )
                 let url = URL(string: item.profileUrl ?? "")
-                cell.userProfile.kf.setImage(with: url, placeholder: UIImage(named: "DummyImage.svg"))
+                cell.userProfile.kf.setImage(with: url, placeholder: UIImage(named: "userDummyImage"))
                 cell.userName.text = item.name
-                cell.userNum.text = "\(item.studentNum.grade)\(item.studentNum.classNum)\(item.studentNum.number)"
+                cell.userNum.text = "\(item.studentNum.grade)학년 \(item.studentNum.classNum)반 \(item.studentNum.number)번"
             }.disposed(by: disposeBag)
     }
 }

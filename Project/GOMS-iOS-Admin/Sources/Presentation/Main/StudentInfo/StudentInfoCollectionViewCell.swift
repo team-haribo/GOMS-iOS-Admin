@@ -41,14 +41,19 @@ class StudentInfoCollectionViewCell: UICollectionViewCell {
         $0.textColor = GOMSAdminAsset.subColor.color
     }
     
+    let editButton = UIButton().then {
+        $0.setImage(UIImage(named: "editIcon"), for: .normal)
+    }
+    
     func addView() {
-        [userProfile, userName, userNum].forEach {
+        [userProfile, userName, userNum, editButton].forEach {
             contentView.addSubview($0)
         }
     }
     
     func setLayout() {
         userProfile.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
             $0.top.leading.equalToSuperview().offset(20)
             $0.width.height.equalTo(50)
         }
@@ -59,6 +64,10 @@ class StudentInfoCollectionViewCell: UICollectionViewCell {
         userNum.snp.makeConstraints {
             $0.top.equalTo(userName.snp.bottom).offset(6)
             $0.leading.equalTo(userProfile.snp.trailing).offset(24)
+        }
+        editButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(17)
         }
     }
 }
