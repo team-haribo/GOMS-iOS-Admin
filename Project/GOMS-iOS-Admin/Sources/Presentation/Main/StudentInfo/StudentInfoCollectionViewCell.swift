@@ -12,6 +12,16 @@ import SnapKit
 
 class StudentInfoCollectionViewCell: UICollectionViewCell {
     static let identifier = "studentCell"
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addView()
+        self.setLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
         
     let userProfile = UIImageView().then {
         $0.translatesAutoresizingMaskIntoConstraints = false
@@ -20,23 +30,15 @@ class StudentInfoCollectionViewCell: UICollectionViewCell {
     }
     
     let userName = UILabel().then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
         $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 16)
         $0.textColor = .black
     }
     
     let userNum = UILabel().then {
+        $0.translatesAutoresizingMaskIntoConstraints = false
         $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 14)
         $0.textColor = GOMSAdminAsset.subColor.color
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.addView()
-        self.setLayout()
-    }
-        
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     func addView() {
