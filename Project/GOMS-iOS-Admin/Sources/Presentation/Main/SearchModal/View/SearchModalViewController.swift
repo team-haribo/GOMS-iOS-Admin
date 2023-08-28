@@ -153,11 +153,14 @@ class SearchModalViewController: BaseViewController<SearchModalReactor> {
         }
     }
     
-    override func bind(reactor: SearchModalReactor) {
+    override func bindAction(reactor: SearchModalReactor) {
         resetButton.rx.tap
             .map { SearchModalReactor.Action.resetButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+    }
+    
+    override func bindState(reactor: SearchModalReactor) {
         reactor.state.map { $0.resetSegmentedControls }
             .distinctUntilChanged()
             .filter { $0 }
