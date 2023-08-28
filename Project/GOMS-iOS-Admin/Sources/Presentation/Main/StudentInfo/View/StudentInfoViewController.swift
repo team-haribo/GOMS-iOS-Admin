@@ -52,6 +52,18 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         $0.image = UIImage(named: "Search")
     }
     
+    private let noResultImage = UIImageView().then {
+        $0.image = UIImage(named: "noResultImage")
+        $0.isHidden = true
+    }
+
+    private let noResultText = UILabel().then {
+        $0.text = "검색 결과를 찾을 수 없어요!"
+        $0.textColor = GOMSAdminAsset.subColor.color
+        $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 16)
+        $0.isHidden = true
+    }
+    
     private let layout = UICollectionViewFlowLayout().then {
         $0.itemSize = CGSize(
             width: (
@@ -74,7 +86,12 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     }
     
     override func addView() {
-        [searchButton, searchIcon, studentInfoCollectionView].forEach {
+        [
+            searchButton,
+            searchIcon,
+            studentInfoCollectionView,
+            noResultImage,
+            noResultText].forEach {
             view.addSubview($0)
         }
     }
@@ -93,6 +110,14 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
             $0.top.equalTo(searchButton.snp.bottom).offset(30)
             $0.leading.trailing.equalToSuperview().inset(26)
             $0.bottom.equalToSuperview()
+        }
+        noResultImage.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(searchButton.snp.bottom).offset(160)
+        }
+        noResultText.snp.makeConstraints {
+            $0.top.equalTo(noResultImage.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
         }
     }
     
