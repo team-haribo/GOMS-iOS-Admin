@@ -103,7 +103,7 @@ class HomeViewController: BaseViewController<HomeReactor> {
         $0.backgroundColor = GOMSAdminAsset.background.color
     }
     
-    private let profileButton = UIButton().then {
+    private let studentManagementButton = UIButton().then {
         $0.backgroundColor = .white
         $0.layer.applySketchShadow(
             color: UIColor.black,
@@ -133,7 +133,7 @@ class HomeViewController: BaseViewController<HomeReactor> {
     }
     
     override func addView() {
-        [homeMainImage, homeMainText, useQRCodeButton, outingButton, totalStudentText, outingStudentText, outingNavigationButton, tardyText, tardyCollectionView, profileButton ,subStudnetInfoText,studnetInfoText, profileNavigationButton].forEach {
+        [homeMainImage, homeMainText, useQRCodeButton, outingButton, totalStudentText, outingStudentText, outingNavigationButton, tardyText, tardyCollectionView, studentManagementButton ,subStudnetInfoText,studnetInfoText, profileNavigationButton].forEach {
             view.addSubview($0)
         }
     }
@@ -169,7 +169,7 @@ class HomeViewController: BaseViewController<HomeReactor> {
         
         outingNavigationButton.snp.makeConstraints {
             $0.centerY.equalTo(outingButton.snp.centerY).offset(0)
-            $0.trailing.equalTo(profileButton.snp.trailing).inset(23)
+            $0.trailing.equalTo(studentManagementButton.snp.trailing).inset(23)
         }
         
         tardyText.snp.makeConstraints {
@@ -181,22 +181,22 @@ class HomeViewController: BaseViewController<HomeReactor> {
             $0.leading.trailing.equalToSuperview().inset(26)
             $0.bottom.equalTo(view.snp.bottom).inset((bounds.height) / 3.5)
         }
-        profileButton.snp.makeConstraints {
+        studentManagementButton.snp.makeConstraints {
             $0.top.equalTo(tardyCollectionView.snp.bottom).offset(32)
             $0.leading.trailing.equalToSuperview().inset(26)
             $0.height.equalTo((bounds.height) / 11.6)
         }
         subStudnetInfoText.snp.makeConstraints {
-            $0.top.equalTo(profileButton.snp.top).offset((bounds.height) / 45.11)
-            $0.leading.equalTo(profileButton.snp.leading).offset(14)
+            $0.top.equalTo(studentManagementButton.snp.top).offset((bounds.height) / 45.11)
+            $0.leading.equalTo(studentManagementButton.snp.leading).offset(14)
         }
         studnetInfoText.snp.makeConstraints {
             $0.top.equalTo(subStudnetInfoText.snp.bottom).offset(8)
-            $0.leading.equalTo(profileButton.snp.leading).offset(14)
+            $0.leading.equalTo(studentManagementButton.snp.leading).offset(14)
         }
         profileNavigationButton.snp.makeConstraints {
-            $0.centerY.equalTo(profileButton.snp.centerY).offset(0)
-            $0.trailing.equalTo(profileButton.snp.trailing).inset(23)
+            $0.centerY.equalTo(studentManagementButton.snp.centerY).offset(0)
+            $0.trailing.equalTo(studentManagementButton.snp.trailing).inset(23)
         }
     }
     
@@ -224,6 +224,10 @@ class HomeViewController: BaseViewController<HomeReactor> {
             .disposed(by: disposeBag)
         outingButton.rx.tap
             .map { HomeReactor.Action.outingButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        studentManagementButton.rx.tap
+            .map { HomeReactor.Action.studentInfoButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

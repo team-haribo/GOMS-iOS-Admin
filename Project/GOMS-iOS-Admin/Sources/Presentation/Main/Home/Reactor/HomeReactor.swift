@@ -33,6 +33,7 @@ class HomeReactor: Reactor, Stepper{
         case outingButtonDidTap
         case fetchOutingCount
         case fetchLateRank
+        case studentInfoButtonDidTap
     }
     
     enum Mutation {
@@ -65,6 +66,8 @@ extension HomeReactor {
             return fetchOutingCount()
         case .fetchLateRank:
             return fetchLateRank()
+        case .studentInfoButtonDidTap:
+            return studentInfoButtonTap()
         }
     }
 }
@@ -96,6 +99,11 @@ private extension HomeReactor {
     
     func outingButtonDidTap() -> Observable<Mutation> {
         self.steps.accept(GOMSAdminStep.outingIsRequired)
+        return .empty()
+    }
+    
+    func studentInfoButtonTap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.studentInfoIsRequired)
         return .empty()
     }
     

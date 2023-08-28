@@ -4,6 +4,7 @@ import Moya
 
 enum StudentCouncilServices {
     case createQRCode(authorization : String)
+    case fetchStudentList(authorization : String)
 }
 
 
@@ -16,6 +17,8 @@ extension StudentCouncilServices: TargetType {
         switch self {
         case .createQRCode:
             return "/student-council/outing"
+        case .fetchStudentList:
+            return "/student-council/accounts"
         }
     }
     
@@ -23,6 +26,8 @@ extension StudentCouncilServices: TargetType {
         switch self {
         case .createQRCode:
             return .post
+        case .fetchStudentList:
+            return .get
         }
     }
     
@@ -32,14 +37,14 @@ extension StudentCouncilServices: TargetType {
     
     var task: Task {
         switch self {
-        case .createQRCode:
+        case .createQRCode, .fetchStudentList:
             return .requestPlain
         }
     }
     
     var headers: [String : String]? {
         switch self {
-        case let .createQRCode(authorization):
+        case let .createQRCode(authorization), let .fetchStudentList(authorization):
             return["Content-Type" :"application/json","Authorization" : authorization]
         default:
             return["Content-Type" :"application/json"]
