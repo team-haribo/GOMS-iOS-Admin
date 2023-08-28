@@ -65,12 +65,14 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     }
     
     private let layout = UICollectionViewFlowLayout().then {
+        let itemWidth = (UIScreen.main.bounds.width) - 52
+        let aspectRatio: CGFloat = 1.0 / 3.6
         $0.itemSize = CGSize(
             width: (
-                (UIScreen.main.bounds.width) - 52
+                itemWidth
             ),
             height: (
-                90
+                itemWidth * aspectRatio
             )
         )
         $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
@@ -156,7 +158,9 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
                 let url = URL(string: item.profileUrl ?? "")
                 cell.userProfile.kf.setImage(with: url, placeholder: UIImage(named: "userDummyImage"))
                 cell.userName.text = item.name
-                cell.userNum.text = "\(item.studentNum.grade)학년 \(item.studentNum.classNum)반 \(item.studentNum.number)번"
+                let number = item.studentNum.number
+                let formattedNumber = number < 10 ? "0\(number)" : "\(number)"
+                cell.userNum.text = "\(item.studentNum.grade)학년 \(item.studentNum.classNum)반 \(formattedNumber)번"
                 cell.editButton.rx.tap
                     .map { StudentInfoReactor.Action.editButtonDidTap }
                     .bind(to: reactor.action)

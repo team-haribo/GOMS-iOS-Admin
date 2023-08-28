@@ -50,7 +50,7 @@ class HomeFlow: Flow {
         case .profileIsRequired:
             return coordinateToProfile()
             
-        case .studentInfoIsRequired:
+        case .studentManagementIsRequired:
             return coordinateToStudentInfo()
             
         case .searchButtonIsRequired:
