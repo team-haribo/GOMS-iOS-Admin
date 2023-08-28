@@ -6,11 +6,6 @@ import RxFlow
 
 class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
 
-    override func viewDidLoad(){
-        super.viewDidLoad()
-        self.navigationItem.backButton(title: "")
-    }
-    
     private let loginWithNumberText = UILabel().then {
         $0.text = "로그인"
         $0.font = GOMSAdminFontFamily.SFProText.bold.font(size: 32)
