@@ -56,6 +56,9 @@ class HomeFlow: Flow {
         case .searchButtonIsRequired:
             return coordinateToSearchModal()
             
+        case .editButtonIsRequired:
+            return coordinateToEditModal()
+            
         default:
             return .none
         }
@@ -95,6 +98,19 @@ class HomeFlow: Flow {
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     
+    private func coordinateToEditModal() -> FlowContributors{
+        let vm = EditModalReactor()
+        let vc = EditModalViewController(vm)
+        if let sheet = vc.sheetPresentationController {
+            sheet.detents = [.medium()]
+            sheet.largestUndimmedDetentIdentifier = .large
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.preferredCornerRadius = 20
+        }
+        self.rootViewController.topViewController?.present(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
     private func presentToAlert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction]) -> FlowContributors {
         let alert = UIAlertController(title: title, message: message, preferredStyle: style)
         actions.forEach { alert.addAction($0) }
@@ -111,5 +127,11 @@ class HomeFlow: Flow {
         }
         self.rootViewController.topViewController?.present(alert, animated: true)
         return .none
+    }
+}
+
+extension UISheetPresentationController.Detent.Identifier {
+    static func customIdentifier(_ identifier: String) -> UISheetPresentationController.Detent.Identifier {
+        return UISheetPresentationController.Detent.Identifier(identifier)
     }
 }

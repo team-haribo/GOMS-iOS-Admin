@@ -157,6 +157,9 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
                 cell.userProfile.kf.setImage(with: url, placeholder: UIImage(named: "userDummyImage"))
                 cell.userName.text = item.name
                 cell.userNum.text = "\(item.studentNum.grade)학년 \(item.studentNum.classNum)반 \(item.studentNum.number)번"
+                cell.editButton.rx.tap
+                    .map { StudentInfoReactor.Action.editButtonDidTap }
+                    .bind(to: reactor.action)
             }.disposed(by: disposeBag)
     }
 }
