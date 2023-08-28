@@ -25,6 +25,7 @@ class ProfileReactor: Reactor, Stepper{
     
     enum Action {
         case viewWillAppear
+        case logoutButtonDidTap
     }
     
     enum Mutation {
@@ -47,6 +48,8 @@ extension ProfileReactor {
         switch action {
         case .viewWillAppear:
             return viewWillAppear()
+        case .logoutButtonDidTap:
+            return logoutButtonDidtap()
         }
     }
 }
@@ -95,5 +98,27 @@ private extension ProfileReactor {
             }
             return Disposables.create()
         }
+    }
+    
+    func logoutButtonDidtap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.alert(
+            title: "로그아웃",
+            message: "정말 로그아웃 하시겠습니까?",
+            style: .alert,
+            actions: [
+                .init(title: "확인", style: .default) {_ in
+                    self.steps.accept(GOMSAdminStep.introIsRequired)
+                    self.deleteUserToken()
+                },
+                .init(title: "취소", style: .cancel)
+            ]
+        ))
+        return .empty()
+    }
+    
+    private func deleteUserToken() {
+        keychain.deleteItem(key: Const.KeychainKey.accessToken)
+        keychain.deleteItem(key: Const.KeychainKey.refreshToken)
+        keychain.deleteItem(key: Const.KeychainKey.authority)
     }
 }
