@@ -44,14 +44,14 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
         )
     }
     
-    private var numberTextField = LoginWithNumberTextField(
+    var numberTextField = LoginWithNumberTextField(
         placeholder: "인증번호를 입력하세요",
         width: 16
     ).then {
         $0.isHidden = true
     }
     
-    private var completeButton = UIButton().then {
+    var completeButton = UIButton().then {
         $0.setTitle(
             "인증하기",
             for: .normal
@@ -117,4 +117,21 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
         }
     }
     
+    // MARK: - Reactor
+
+    override func bindAction(reactor: LoginWithNumberReactor) {
+        confirmationButton.rx.tap
+            .map{LoginWithNumberReactor.Action.confirmationButtonDidTap(
+                email: self.emailTextField.text ?? ""
+            )}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindState(reactor: LoginWithNumberReactor) {
+        reactor.state
+            .map { $0.numberTextFieldIsHidden }
+            .bind(to: self.rx.isHidden)
+            .disposed(by: disposeBag)
+    }
 }
