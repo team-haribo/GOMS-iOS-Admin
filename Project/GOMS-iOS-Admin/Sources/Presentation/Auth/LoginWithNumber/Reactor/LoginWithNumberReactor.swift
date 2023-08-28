@@ -63,8 +63,10 @@ extension LoginWithNumberReactor {
 // MARK: - Method
 private extension LoginWithNumberReactor {
     func confirmationButtonDidTap(email: String) -> Observable<Mutation> {
+        let param = SendEmailRequest(email: email)
         return Observable.create { observer in
-            self.authProvider.request(.sendEmail(email: email)) { result in
+            self.authProvider.request(.sendEmail(param: param)) { result in
+                print(email)
                 switch result {
                 case let .success(res):
                     let statusCode = res.statusCode

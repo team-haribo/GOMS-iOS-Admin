@@ -57,12 +57,7 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
         )
         $0.titleLabel?.font = GOMSAdminFontFamily.SFProText.bold.font(size: 16)
         $0.layer.cornerRadius = 10
-        $0.backgroundColor = UIColor(
-            red: 1,
-            green: 139/255,
-            blue: 67/255,
-            alpha: 0.5
-        )
+        $0.backgroundColor = GOMSAdminAsset.mainColor.color
         $0.isHidden = true
     }
 
