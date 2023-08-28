@@ -4,8 +4,8 @@ import Moya
 enum AuthServices {
     case signIn(param: SignInRequest)
     case refreshToken(refreshToken: String)
-    case sendEmail(authorization: String, param: SendEmailRequest)
-    case emailVerify(authorization: String, email: String, authCode: String)
+    case sendEmail(email: String)
+    case emailVerify(email: String, authCode: String)
 }
 
 
@@ -48,9 +48,9 @@ extension AuthServices: TargetType {
             return .requestJSONEncodable(param)
         case .refreshToken:
             return .requestPlain
-        case let .sendEmail(_, param):
-            return .requestJSONEncodable(param)
-        case let .emailVerify(_, email, authCode):
+        case let .sendEmail(email):
+            return .requestJSONEncodable(email)
+        case let .emailVerify(email, authCode):
             return .requestParameters(parameters: [
                 "email" : email,
                 "authCode" : authCode
@@ -62,8 +62,6 @@ extension AuthServices: TargetType {
         switch self {
         case let .refreshToken(refreshToken):
             return["Content-Type" :"application/json","refreshToken" : refreshToken]
-        case let .sendEmail(authorization, _), let .emailVerify(authorization, _, _):
-            return["Content-Type" :"application/json","Authorization" : authorization]
         default:
             return["Content-Type" :"application/json"]
         }
