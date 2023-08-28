@@ -227,7 +227,7 @@ class HomeViewController: BaseViewController<HomeReactor> {
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
         studentManagementButton.rx.tap
-            .map { HomeReactor.Action.studentInfoButtonDidTap }
+            .map { HomeReactor.Action.studentManagementButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

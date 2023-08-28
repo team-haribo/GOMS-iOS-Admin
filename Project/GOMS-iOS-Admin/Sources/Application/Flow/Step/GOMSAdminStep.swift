@@ -18,7 +18,7 @@ enum GOMSAdminStep: Step {
     case outingIsRequired
     case homeIsRequired
     case profileIsRequired
-    case studentInfoIsRequired
+    case studentManagementIsRequired
     case searchButtonIsRequired
     case editButtonIsRequired
     
