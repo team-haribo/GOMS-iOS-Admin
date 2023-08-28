@@ -154,6 +154,13 @@ class ProfileViewController: BaseViewController<ProfileReactor> {
         }
     }
     
+    override func bindView(reactor: ProfileReactor) {
+        logoutButton.rx.tap
+            .map {ProfileReactor.Action.logoutButtonDidTap}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
     override func bindAction(reactor: ProfileReactor) {
         self.rx.methodInvoked(#selector(viewWillAppear))
             .map { _ in ProfileReactor.Action.viewWillAppear }

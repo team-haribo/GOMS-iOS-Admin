@@ -4,6 +4,8 @@ import Moya
 enum AuthServices {
     case signIn(param: SignInRequest)
     case refreshToken(refreshToken: String)
+    case sendEmail(email: String)
+    case emailVerify(email: String, authCode: String)
 }
 
 
@@ -18,15 +20,21 @@ extension AuthServices: TargetType {
             return "/auth/signin/"
         case .refreshToken:
             return "/auth/"
+        case .sendEmail:
+            return "/auth/email/send"
+        case .emailVerify:
+            return "auth/email/verify"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .signIn:
+        case .signIn, .sendEmail:
             return .post
         case .refreshToken:
             return .patch
+        case .emailVerify:
+            return .get
         }
     }
     
@@ -36,10 +44,17 @@ extension AuthServices: TargetType {
     
     var task: Task {
         switch self {
-        case .signIn(let param):
+        case let .signIn(param):
             return .requestJSONEncodable(param)
         case .refreshToken:
             return .requestPlain
+        case let .sendEmail(email):
+            return .requestJSONEncodable(email)
+        case let .emailVerify(email, authCode):
+            return .requestParameters(parameters: [
+                "email" : email,
+                "authCode" : authCode
+            ], encoding: URLEncoding.queryString)
         }
     }
     
