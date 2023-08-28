@@ -65,12 +65,14 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     }
     
     private let layout = UICollectionViewFlowLayout().then {
+        let itemWidth = (UIScreen.main.bounds.width) - 52
+        let aspectRatio: CGFloat = 1.0 / 3.6
         $0.itemSize = CGSize(
             width: (
-                (UIScreen.main.bounds.width) - 52
+                itemWidth
             ),
             height: (
-                90
+                itemWidth * aspectRatio
             )
         )
         $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
