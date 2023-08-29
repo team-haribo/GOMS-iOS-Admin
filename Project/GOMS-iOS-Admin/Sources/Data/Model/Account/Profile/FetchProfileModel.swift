@@ -5,7 +5,6 @@ struct FetchProfileModel: Codable {
 }
 
 struct FetchProfileResponse: Codable {
-    let accountIdx: UUID
     let name: String
     let studentNum: StudentNum
     let authority: String
