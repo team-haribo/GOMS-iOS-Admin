@@ -18,12 +18,12 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
         $0.textColor = GOMSAdminAsset.subColor.color
     }
     
-    private var emailTextField = LoginWithNumberTextField(
-        placeholder: "s21031",
+    var emailTextField = LoginWithNumberTextField(
+        placeholder: "s21031@gsm.hs.kr",
         width: 16
     )
     
-    private var confirmationButton = UIButton().then {
+    var confirmationButton = UIButton().then {
         $0.setTitle("인증", for: .normal)
         $0.setTitleColor(UIColor.white, for: .normal)
         $0.titleLabel?.font = GOMSAdminFontFamily.SFProText.medium.font(size: 14)
@@ -57,7 +57,20 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
         )
         $0.titleLabel?.font = GOMSAdminFontFamily.SFProText.bold.font(size: 16)
         $0.layer.cornerRadius = 10
-        $0.backgroundColor = GOMSAdminAsset.mainColor.color
+        $0.backgroundColor = UIColor(
+            red: 171/255,
+            green: 202/255,
+            blue: 248/255,
+            alpha: 1
+        )
+        $0.layer.applySketchShadow(
+            color: UIColor.black,
+            alpha: 0.1,
+            x: 0,
+            y: 2,
+            blur: 8,
+            spread: 0
+        )
         $0.isHidden = true
     }
 
@@ -116,12 +129,32 @@ class LoginWithNumberViewController: BaseViewController<LoginWithNumberReactor>{
             )}
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        numberTextField.rx.controlEvent(.editingChanged)
+            .map {LoginWithNumberReactor.Action.numberIsTyping}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindView(reactor: LoginWithNumberReactor) {
+        completeButton.rx.tap
+            .map { LoginWithNumberReactor.Action.loginWithNumberCompleted(
+                email: self.emailTextField.text ?? "",
+                authCode: self.numberTextField.text ?? ""
+            )}
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     override func bindState(reactor: LoginWithNumberReactor) {
         reactor.state
             .map { $0.numberTextFieldIsHidden }
             .bind(to: self.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        reactor.state
+            .map { $0.numberIsTyping }
+            .bind(to: self.rx.numberIsTyping)
             .disposed(by: disposeBag)
     }
 }

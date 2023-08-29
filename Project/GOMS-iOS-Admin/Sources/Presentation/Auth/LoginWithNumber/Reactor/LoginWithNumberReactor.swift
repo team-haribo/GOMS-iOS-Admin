@@ -13,24 +13,26 @@ class LoginWithNumberReactor: Reactor, Stepper{
     
     let authProvider = MoyaProvider<AuthServices>(plugins: [NetworkLoggerPlugin()])
         
-    var authData: SignInResponse?
+    var authData: EmailVerifyResponse?
     
     var steps: PublishRelay<Step> = .init()
-    
-    let gomsAdminRefreshToken = GOMSAdminRefreshToken.shared
-    
+        
     // MARK: - Reactor
     
     enum Action {
         case confirmationButtonDidTap(email: String)
+        case loginWithNumberCompleted(email: String, authCode: String)
+        case numberIsTyping
     }
     
     enum Mutation {
         case numberTextFieldIsHidden(Bool)
+        case numberIsTyping(Bool)
     }
     
     struct State {
         var numberTextFieldIsHidden = true
+        var numberIsTyping = false
     }
     
     // MARK: - Init
@@ -45,6 +47,10 @@ extension LoginWithNumberReactor {
         switch action {
         case let .confirmationButtonDidTap(email):
             return confirmationButtonDidTap(email: email)
+        case let .loginWithNumberCompleted(email, authCode):
+            return loginWithNumberCompleted(email: email, authCode: authCode)
+        case .numberIsTyping:
+            return Observable.just(Mutation.numberIsTyping(true))
         }
     }
 }
@@ -55,6 +61,8 @@ extension LoginWithNumberReactor {
         switch mutation {
         case let .numberTextFieldIsHidden(isHidden):
             newState.numberTextFieldIsHidden = isHidden
+        case let .numberIsTyping(typing):
+            newState.numberIsTyping = typing
         }
         return newState
     }
@@ -73,11 +81,16 @@ private extension LoginWithNumberReactor {
                     switch statusCode{
                     case 200..<300:
                         observer.onNext(Mutation.numberTextFieldIsHidden(false))
-                    case 401:
-                        self.gomsAdminRefreshToken.tokenReissuance()
+                    case 404:
+                        self.steps.accept(GOMSAdminStep.failureAlert(
+                            title: "실패",
+                            message: "회원가입을 해주세요"
+                        ))
+                        observer.onNext(Mutation.numberTextFieldIsHidden(true))
+                    case 429:
                         self.steps.accept(GOMSAdminStep.failureAlert(
                             title: "오류",
-                            message: "작업을 한 번 더 시도해주세요"
+                            message: "시도 횟수가 5번 이상입니다."
                         ))
                         observer.onNext(Mutation.numberTextFieldIsHidden(true))
                     default:
@@ -89,5 +102,63 @@ private extension LoginWithNumberReactor {
             }
             return Disposables.create()
         }
+    }
+    
+    func loginWithNumberCompleted(email:String, authCode: String) -> Observable<Mutation> {
+        authProvider.request(.emailVerify(email: email, authCode: authCode)) { response in
+            switch response {
+            case .success(let result):
+                print(String(data: result.data, encoding: .utf8))
+                do {
+                    self.authData = try result.map(EmailVerifyResponse.self)
+                }catch(let err) {
+                    print(String(describing: err))
+                }
+                let statusCode = result.statusCode
+                switch statusCode{
+                case 200..<300:
+                    if self.authData?.authority == "ROLE_STUDENT_COUNCIL" {
+                        self.addKeychainToken()
+                        self.steps.accept(GOMSAdminStep.tabBarIsRequired)
+                    }
+                    else {
+                        self.steps.accept(GOMSAdminStep.failureAlert(
+                            title: "오류",
+                            message: "어드민 계정이 아닙니다."
+                        ))
+                    }
+                case 404:
+                    self.steps.accept(GOMSAdminStep.failureAlert(
+                        title: "오류",
+                        message: "인증코드를 확인해주세요"
+                    ))
+                case 429:
+                    self.steps.accept(GOMSAdminStep.failureAlert(
+                        title: "오류",
+                        message: "시도 횟수가 5번 이상입니다."
+                    ))
+                default:
+                    print("ERROR")
+                }
+            case .failure(let err):
+                print(String(describing: err))
+            }
+        }
+        return .empty()
+    }
+    
+    func addKeychainToken() {
+        self.keychain.create(
+            key: Const.KeychainKey.accessToken,
+            token: self.authData?.accessToken ?? ""
+        )
+        self.keychain.create(
+            key: Const.KeychainKey.refreshToken,
+            token: self.authData?.refreshToken ?? ""
+        )
+        self.keychain.create(
+            key: Const.KeychainKey.authority,
+            token: self.authData?.authority ?? ""
+        )
     }
 }
