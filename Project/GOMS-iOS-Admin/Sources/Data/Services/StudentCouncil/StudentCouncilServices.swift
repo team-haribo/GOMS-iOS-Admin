@@ -6,6 +6,8 @@ enum StudentCouncilServices {
     case createQRCode(authorization : String)
     case fetchStudentList(authorization : String)
     case editAuthority(authorization: String, param: EditAuthorityRequest)
+    case addToBlackList(authorization: String, accountIdx: UUID)
+    case blackListDelete(authorization: String, accountIdx: UUID)
 }
 
 
@@ -22,17 +24,21 @@ extension StudentCouncilServices: TargetType {
             return "/student-council/accounts"
         case .editAuthority:
             return "/student-council/authority"
+        case let .addToBlackList(_,accountIdx),let .blackListDelete(_,accountIdx):
+            return "/student-council/black-list/\(accountIdx)"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .createQRCode:
+        case .createQRCode, .addToBlackList:
             return .post
         case .fetchStudentList:
             return .get
         case .editAuthority:
             return .patch
+        case .blackListDelete:
+            return .delete
         }
     }
     
@@ -42,7 +48,7 @@ extension StudentCouncilServices: TargetType {
     
     var task: Task {
         switch self {
-        case .createQRCode, .fetchStudentList:
+        case .createQRCode, .fetchStudentList, .addToBlackList, .blackListDelete:
             return .requestPlain
         case let .editAuthority(_, param):
             return .requestJSONEncodable(param)
@@ -51,7 +57,7 @@ extension StudentCouncilServices: TargetType {
     
     var headers: [String : String]? {
         switch self {
-        case let .createQRCode(authorization), let .fetchStudentList(authorization), let .editAuthority(authorization,_):
+        case let .createQRCode(authorization), let .fetchStudentList(authorization), let .editAuthority(authorization,_), let .addToBlackList(authorization, _), let .blackListDelete(authorization,_):
             return["Content-Type" :"application/json","Authorization" : authorization]
         default:
             return["Content-Type" :"application/json"]
