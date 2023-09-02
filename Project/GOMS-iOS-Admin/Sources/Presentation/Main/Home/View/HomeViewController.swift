@@ -91,7 +91,12 @@ class HomeViewController: BaseViewController<HomeReactor> {
                 (UIScreen.main.bounds.height) / 6.76
             )
         )
-        $0.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5) //아이템 상하좌우 사이값 초기화
+        $0.sectionInset = UIEdgeInsets(
+            top: 0,
+            left: 5,
+            bottom: 0,
+            right: 5
+        )
     }
     
     private lazy var tardyCollectionView = UICollectionView(
@@ -133,7 +138,21 @@ class HomeViewController: BaseViewController<HomeReactor> {
     }
     
     override func addView() {
-        [homeMainImage, homeMainText, useQRCodeButton, outingButton, totalStudentText, outingStudentText, outingNavigationButton, tardyText, tardyCollectionView, studentManagementButton ,subStudnetInfoText,studnetInfoText, profileNavigationButton].forEach {
+        [
+            homeMainImage,
+            homeMainText,
+            useQRCodeButton,
+            outingButton,
+            totalStudentText,
+            outingStudentText,
+            outingNavigationButton,
+            tardyText,
+            tardyCollectionView,
+            studentManagementButton,
+            subStudnetInfoText,
+            studnetInfoText,
+            profileNavigationButton
+        ].forEach {
             view.addSubview($0)
         }
     }
@@ -171,7 +190,6 @@ class HomeViewController: BaseViewController<HomeReactor> {
             $0.centerY.equalTo(outingButton.snp.centerY).offset(0)
             $0.trailing.equalTo(studentManagementButton.snp.trailing).inset(23)
         }
-        
         tardyText.snp.makeConstraints {
             $0.top.equalTo(outingButton.snp.bottom).offset(32)
             $0.leading.equalToSuperview().offset(26)

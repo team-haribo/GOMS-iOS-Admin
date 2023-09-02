@@ -46,7 +46,12 @@ class StudentInfoCollectionViewCell: UICollectionViewCell {
     }
     
     func addView() {
-        [userProfile, userName, userNum, editButton].forEach {
+        [
+            userProfile,
+            userName,
+            userNum,
+            editButton
+        ].forEach {
             contentView.addSubview($0)
         }
     }
