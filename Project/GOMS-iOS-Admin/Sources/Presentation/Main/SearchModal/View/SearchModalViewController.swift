@@ -104,7 +104,8 @@ class SearchModalViewController: BaseViewController<SearchModalReactor> {
             roleSegmentedControl,
             gradeSegmentedControl,
             classNumSegmentedControl,
-            searchButton].forEach {
+            searchButton
+        ].forEach {
                 view.addSubview($0)
             }
     }

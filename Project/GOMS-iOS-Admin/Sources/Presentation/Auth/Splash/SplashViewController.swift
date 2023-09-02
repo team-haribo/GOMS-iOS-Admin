@@ -53,7 +53,10 @@ final class SplashViewController: UIViewController, Stepper {
     }
         
     private func addView() {
-        [splashLogo,splashSunImage].forEach {
+        [
+            splashLogo,
+            splashSunImage
+        ].forEach {
             view.addSubview($0)
         }
     }

@@ -46,7 +46,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
     
     private let gauthSignInButton = GAuthButton(auth: .signin, color: .colored, rounded: .default)
     
-    private let cannotLoginText = UILabel().then {
+    private let loginWithNumberText = UILabel().then {
         $0.text = "GAuth가 안된다면?"
         $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 12)
         $0.textColor = UIColor(
@@ -90,7 +90,7 @@ class IntroViewController: BaseViewController<IntroReactor> {
             explainText,
             subExplainText,
             gauthSignInButton,
-            cannotLoginText,
+            loginWithNumberText,
             loginWithNumberButton
         ].forEach{
             view.addSubview($0)
@@ -116,14 +116,14 @@ class IntroViewController: BaseViewController<IntroReactor> {
             $0.leading.trailing.equalToSuperview().inset(26)
             $0.height.equalTo(60)
         }
-        cannotLoginText.snp.makeConstraints {
+        loginWithNumberText.snp.makeConstraints {
             $0.top.equalTo(gauthSignInButton.snp.bottom).offset(14)
             $0.leading.equalToSuperview().offset((bounds.width) / 4)
         }
         loginWithNumberButton.snp.makeConstraints {
             $0.top.equalTo(gauthSignInButton.snp.bottom).offset(14)
-            $0.leading.equalTo(cannotLoginText.snp.trailing).offset(8)
-            $0.height.equalTo(cannotLoginText.snp.height)
+            $0.leading.equalTo(loginWithNumberText.snp.trailing).offset(8)
+            $0.height.equalTo(loginWithNumberText.snp.height)
         }
     }
     
