@@ -56,7 +56,7 @@ class HomeFlow: Flow {
         case .searchButtonIsRequired:
             return coordinateToSearchModal()
             
-        case .editButtonIsRequired:
+        case .editIconIsRequired:
             return coordinateToEditModal()
             
         default:

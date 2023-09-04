@@ -26,7 +26,7 @@ class StudentInfoReactor: Reactor, Stepper{
     enum Action {
         case searchButtonDidTap
         case fetchStudentList
-        case editButtonDidTap
+        case editIconDidTap
     }
     
     enum Mutation {
@@ -51,8 +51,8 @@ extension StudentInfoReactor {
             return searchButtonDidTap()
         case .fetchStudentList:
             return fetchStudentList()
-        case .editButtonDidTap:
-            return editButtonDidTap()
+        case .editIconDidTap:
+            return editIconDidTap()
         }
     }
 }
@@ -109,8 +109,8 @@ private extension StudentInfoReactor {
         }
     }
     
-    func editButtonDidTap() -> Observable<Mutation> {
-        self.steps.accept(GOMSAdminStep.editButtonIsRequired)
+    func editIconDidTap() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.editIconIsRequired)
         return .empty()
     }
 }

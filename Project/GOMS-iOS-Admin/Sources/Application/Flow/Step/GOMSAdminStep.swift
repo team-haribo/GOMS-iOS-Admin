@@ -20,7 +20,7 @@ enum GOMSAdminStep: Step {
     case profileIsRequired
     case studentManagementIsRequired
     case searchButtonIsRequired
-    case editButtonIsRequired
+    case editIconIsRequired
     
     //MARK: Alert
     case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])
