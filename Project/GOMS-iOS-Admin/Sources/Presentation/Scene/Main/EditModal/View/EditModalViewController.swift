@@ -16,6 +16,8 @@ import RxCocoa
 
 class EditModalViewController: BaseViewController<EditModalReactor> {
     
+    private var editedUserAuthority: String? = ""
+    
     private let roleLabel = UILabel().then {
         $0.text = "역할"
         $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 16)
@@ -40,6 +42,14 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
             spread: 0
         )
         $0.layer.cornerRadius = 10
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        roleSegmentedControl.buttonTappedHandler = { [weak self] selectedIndex in
+            self?.roleSegconChanged(selectedIndex: selectedIndex)
+        }
     }
     
     override func addView() {
@@ -67,6 +77,30 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
             $0.leading.trailing.equalToSuperview().inset(26)
             $0.height.equalTo(52)
         }
+    }
+    
+    private func roleSegconChanged(selectedIndex: Int) {
+        switch selectedIndex {
+        case 0:
+            editedUserAuthority = "ROLE_STUDENT"
+        case 1:
+            editedUserAuthority = "ROLE_STUDENT_COUNCIL"
+        case 2:
+            editedUserAuthority = "WWW"
+        default: break
+            editedUserAuthority = "nono"
+        }
+        
+        print(editedUserAuthority)
+    }
+    
+    // MARK: - Reactor
+    
+    override func bindAction(reactor: EditModalReactor) {
+        editButton.rx.tap
+            .map { _ in EditModalReactor.Action.editButtonDidTab(authority: self.editedUserAuthority ?? "") }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 
