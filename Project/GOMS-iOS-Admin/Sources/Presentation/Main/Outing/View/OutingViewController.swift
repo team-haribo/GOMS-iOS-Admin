@@ -9,7 +9,6 @@ class OutingViewController: BaseViewController<OutingReactor> {
     
     private let outingMainText = UILabel().then {
         $0.text = "외출현황"
-        $0.numberOfLines = 3
         $0.font = GOMSAdminFontFamily.SFProText.bold.font(size: 24)
         $0.textColor = .black
     }
@@ -45,7 +44,7 @@ class OutingViewController: BaseViewController<OutingReactor> {
        
     private let layout = UICollectionViewFlowLayout().then {
         $0.itemSize = CGSize(
-            width: ((UIScreen.main.bounds.width) - 52),
+            width: (UIScreen.main.bounds.width - 48),
             height: (90)
         )
         $0.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -71,7 +70,9 @@ class OutingViewController: BaseViewController<OutingReactor> {
     }
     
     override func addView() {
-        [outingMainText, searchTextField, searchButton, outingCollectionView].forEach{
+        [
+        outingMainText, searchTextField, searchButton, outingCollectionView
+        ].forEach{
             view.addSubview($0)
         }
     }
@@ -102,15 +103,20 @@ class OutingViewController: BaseViewController<OutingReactor> {
     
     // MARK: - Reactor
     
-    override func bind(reactor: OutingReactor) {
-        super.bind(reactor: reactor)
-               
+    override func bindView(reactor: OutingReactor) {
+        super.bindView(reactor: reactor)
+        self.rx.methodInvoked(#selector(viewWillAppear))
+            .map { _ in OutingReactor.Action.fetchStudentList }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindAction(reactor: OutingReactor) {
         navigationItem.rightBarButtonItem?.rx.tap
             .map { OutingReactor.Action.profileButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-    }
-
+        }
 }
 
 extension OutingViewController: UICollectionViewDelegate, UICollectionViewDataSource {

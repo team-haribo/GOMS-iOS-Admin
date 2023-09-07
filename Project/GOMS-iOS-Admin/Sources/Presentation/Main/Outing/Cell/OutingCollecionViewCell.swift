@@ -44,7 +44,6 @@ class OutingCollectionViewCell: UICollectionViewCell {
     lazy var deleteButton = UIButton().then {
         $0.setImage(UIImage(named: "deleteIcon.svg"), for: .normal)
         $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
-        $0.isHidden = userAuthority == "ROLE_STUDENT_COUNCIL" ? false : true
     }
     
     override init(frame: CGRect) {

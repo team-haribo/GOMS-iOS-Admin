@@ -63,7 +63,7 @@ extension OutingReactor {
         case .searchButtonDidTap:
             return searchButtonDidTap()
         case .fetchStudentList:
-            return fetchStudentList()
+            return fetchOutingStudentList()
         }
     }
 }
@@ -92,7 +92,7 @@ private extension OutingReactor {
         return .empty()
     }
     
-    func fetchStudentList() -> Observable<Mutation> {
+    func fetchOutingStudentList() -> Observable<Mutation> {
         return Observable.create { observer in
             self.studentInfoProvider.request(.fetchStudentList(authorization: self.accessToken)) { result in
                 switch result {
