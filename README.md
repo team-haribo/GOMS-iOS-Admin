@@ -62,10 +62,12 @@ Project
 
 ## :rocket: Tech Skills
 - Language: Swift
+- Framework: ReactorKit
+- Reactive Programming: RxSwift
 - Layout: Snapkit
 - Design Pattern: MVVM
 - Network: Moya
 - Navigation Logic: RxFlow
 - Cooperation: Git, Github
 - Auth: GauthSignIn
-- Etc: : RxSwift, KingFisher, Then, QRCode, ReactorKit, Tuist
+- Etc: : KingFisher, Then, QRCode, Tuist
