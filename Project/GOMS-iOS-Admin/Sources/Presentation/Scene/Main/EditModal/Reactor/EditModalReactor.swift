@@ -27,7 +27,9 @@ class EditModalReactor: Reactor, Stepper{
     
     lazy var accessToken = "Bearer " + (keychain.read(key: Const.KeychainKey.accessToken) ?? "")
     
-    let accountIdx: UUID = UUID()
+    let studentInfoReactor = StudentInfoReactor.shared
+    
+    var accountIdx: UUID = UUID()
     
     
     // MARK: - Reactor
@@ -45,8 +47,10 @@ class EditModalReactor: Reactor, Stepper{
     }
     
     // MARK: - Init
-    init() {
+    init(accountIdx: UUID) {
         self.initialState = State()
+        self.accountIdx = accountIdx
+        //print(accountIdx)
     }
 }
 

@@ -160,7 +160,7 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
                 cell.userName.text = item.name
                 cell.userNum.text = "\(item.studentNum.grade)학년 \(item.studentNum.classNum)반 \(item.studentNum.number)번"
                 cell.editButton.rx.tap
-                    .map { StudentInfoReactor.Action.editIconDidTap }
+                    .map { StudentInfoReactor.Action.editIconDidTap(accountIdx: item.accountIdx) }
                     .bind(to: reactor.action)
             }.disposed(by: disposeBag)
     }
