@@ -17,6 +17,7 @@ import RxCocoa
 class EditModalViewController: BaseViewController<EditModalReactor> {
     
     private var editedUserAuthority: String? = ""
+    private var editedUserIsBlackList: Bool?
     
     private let roleLabel = UILabel().then {
         $0.text = "역할"
@@ -83,12 +84,15 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
         switch selectedIndex {
         case 0:
             editedUserAuthority = "ROLE_STUDENT"
+            editedUserIsBlackList = false
         case 1:
             editedUserAuthority = "ROLE_STUDENT_COUNCIL"
+            editedUserIsBlackList = false
         case 2:
-            editedUserAuthority = "WWW"
+            editedUserIsBlackList = true
         default: break
-            editedUserAuthority = "nono"
+            editedUserAuthority = ""
+            editedUserIsBlackList = nil
         }
         
         print(editedUserAuthority)
@@ -98,9 +102,16 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
     
     override func bindAction(reactor: EditModalReactor) {
         editButton.rx.tap
-            .map { _ in EditModalReactor.Action.editButtonDidTab(authority: self.editedUserAuthority ?? "") }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+                .flatMapLatest { [weak self] _ -> Observable<EditModalReactor.Action> in
+                    guard let self = self else { return .empty() }
+                    if self.editedUserIsBlackList ?? Bool() {
+                        return .just(.addToBlackList)
+                    } else {
+                        return .just(.editButtonDidTab(authority: editedUserAuthority ?? ""))
+                    }
+                }
+                .bind(to: reactor.action)
+                .disposed(by: disposeBag)
     }
 }
 

@@ -36,6 +36,7 @@ class EditModalReactor: Reactor, Stepper{
     
     enum Action {
         case editButtonDidTab(authority: String)
+        case addToBlackList
     }
     
     enum Mutation {
@@ -60,6 +61,8 @@ extension EditModalReactor {
         switch action {
         case let .editButtonDidTab(authority):
             return updateRole(authority: authority)
+        case .addToBlackList:
+            return addToBlackList()
         }
     }
 }
@@ -89,6 +92,50 @@ private extension EditModalReactor {
                     case 404:
                         self.steps.accept(GOMSAdminStep.failureAlert(title: "오류", message: "계정을 찾을 수 없습니다."))
                         self.steps.accept(GOMSAdminStep.introIsRequired)
+                    default:
+                        print("ERROR")
+                    }
+                    observer.onCompleted()
+                case .failure(let err):
+                    print(String(describing: err))
+                    observer.onError(err)
+                }
+            }
+            return Disposables.create()
+        }
+    }
+    
+    func addToBlackList() -> Observable<Mutation> {
+        return Observable.create { [self] observer in
+            editModalProvider.request(.addToBlackList(authorization: self.accessToken, accountIdx: accountIdx)){ response in
+                switch response {
+                case let .success(result):
+                    let statusCode = result.statusCode
+                    print(self.accessToken)
+                    switch statusCode{
+                    case 200..<300:
+                        print("success")
+                    case 401:
+                        self.gomsAdminRefreshToken.tokenReissuance()
+                    case 403:
+                        self.steps.accept(GOMSAdminStep.failureAlert(
+                            title: "오류",
+                            message: "학생회 계정이 아닙니다.",
+                            action: [.init(title: "확인",style: .default) { _ in
+                                self.steps.accept(GOMSAdminStep.introIsRequired)}
+                                    ]
+                        )
+                        )
+                    case 404:
+                        self.steps.accept(
+                            GOMSAdminStep.failureAlert(
+                                title: "오류",
+                                message: "계정을 찾을 수 없습니다.",
+                                action: [.init(title: "확인",style: .default) { _ in
+                                    self.steps.accept(GOMSAdminStep.introIsRequired)}
+                                        ]
+                            )
+                        )
                     default:
                         print("ERROR")
                     }
