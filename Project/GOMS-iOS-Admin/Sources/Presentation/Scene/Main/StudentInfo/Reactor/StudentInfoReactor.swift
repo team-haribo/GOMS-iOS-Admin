@@ -9,6 +9,8 @@ class StudentInfoReactor: Reactor, Stepper{
     // MARK: - Properties
     var initialState: State
     
+    static let shared = StudentInfoReactor()
+    
     var steps: PublishRelay<Step> = .init()
     
     let studentInfoProvider = MoyaProvider<StudentCouncilServices>(plugins: [NetworkLoggerPlugin()])
@@ -26,7 +28,7 @@ class StudentInfoReactor: Reactor, Stepper{
     enum Action {
         case searchButtonDidTap
         case fetchStudentList
-        case editButtonDidTap
+        case editIconDidTap(accountIdx: UUID)
     }
     
     enum Mutation {
@@ -51,8 +53,8 @@ extension StudentInfoReactor {
             return searchButtonDidTap()
         case .fetchStudentList:
             return fetchStudentList()
-        case .editButtonDidTap:
-            return editButtonDidTap()
+        case let .editIconDidTap(accountIdx):
+            return editIconDidTap(accountIdx: accountIdx)
         }
     }
 }
@@ -109,8 +111,9 @@ private extension StudentInfoReactor {
         }
     }
     
-    func editButtonDidTap() -> Observable<Mutation> {
-        self.steps.accept(GOMSAdminStep.editButtonIsRequired)
+    func editIconDidTap(accountIdx: UUID) -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.editIconIsRequired(accountIdx: accountIdx))
+        print(accountIdx)
         return .empty()
     }
 }

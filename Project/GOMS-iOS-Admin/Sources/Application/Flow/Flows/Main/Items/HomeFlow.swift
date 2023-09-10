@@ -56,8 +56,11 @@ class HomeFlow: Flow {
         case .searchButtonIsRequired:
             return coordinateToSearchModal()
             
-        case .editButtonIsRequired:
-            return coordinateToEditModal()
+        case let .editIconIsRequired(accountIdx):
+            return coordinateToEditModal(accountIdx: accountIdx)
+            
+        case .editModalDismiss:
+            return dismissEditModal()
             
         default:
             return .none
@@ -98,8 +101,8 @@ class HomeFlow: Flow {
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     
-    private func coordinateToEditModal() -> FlowContributors{
-        let vm = EditModalReactor()
+    private func coordinateToEditModal(accountIdx: UUID) -> FlowContributors{
+        let vm = EditModalReactor(accountIdx: accountIdx)
         let vc = EditModalViewController(vm)
         if let sheet = vc.sheetPresentationController {
             sheet.detents = [.medium()]
@@ -127,6 +130,13 @@ class HomeFlow: Flow {
         }
         self.rootViewController.topViewController?.present(alert, animated: true)
         return .none
+    }
+    
+    private func dismissEditModal() -> FlowContributors {
+        let vm = StudentInfoReactor()
+        let vc = StudentInfoViewController(vm)
+        self.rootViewController.dismiss(animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
 }
 

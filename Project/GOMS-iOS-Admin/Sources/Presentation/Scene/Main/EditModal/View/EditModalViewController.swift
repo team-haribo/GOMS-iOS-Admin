@@ -16,6 +16,9 @@ import RxCocoa
 
 class EditModalViewController: BaseViewController<EditModalReactor> {
     
+    private var editedUserAuthority: String? = ""
+    private var editedUserIsBlackList: Bool?
+    
     private let roleLabel = UILabel().then {
         $0.text = "역할"
         $0.font = GOMSAdminFontFamily.SFProText.medium.font(size: 16)
@@ -40,6 +43,14 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
             spread: 0
         )
         $0.layer.cornerRadius = 10
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        roleSegmentedControl.buttonTappedHandler = { [weak self] selectedIndex in
+            self?.roleSegconChanged(selectedIndex: selectedIndex)
+        }
     }
     
     override func addView() {
@@ -67,6 +78,47 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
             $0.leading.trailing.equalToSuperview().inset(26)
             $0.height.equalTo(52)
         }
+    }
+    
+    private func roleSegconChanged(selectedIndex: Int) {
+        switch selectedIndex {
+        case 0:
+            editedUserAuthority = "ROLE_STUDENT"
+            editedUserIsBlackList = false
+        case 1:
+            editedUserAuthority = "ROLE_STUDENT_COUNCIL"
+            editedUserIsBlackList = false
+        case 2:
+            editedUserIsBlackList = true
+        default: break
+            editedUserAuthority = ""
+            editedUserIsBlackList = nil
+        }
+        
+        print(editedUserAuthority)
+    }
+    
+    // MARK: - Reactor
+    
+    override func bindView(reactor: EditModalReactor) {
+        editButton.rx.tap
+            .flatMapLatest { [weak self] _ -> Observable<EditModalReactor.Action> in
+                guard let self = self else { return .empty() }
+                if self.editedUserIsBlackList ?? Bool() {
+                    return .just(.addToBlackList)
+                } else {
+                    return .just(.updateRole(authority: editedUserAuthority ?? ""))
+                }
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    override func bindAction(reactor: EditModalReactor) {
+        editButton.rx.tap
+            .map { EditModalReactor.Action.dismissEditModal }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 

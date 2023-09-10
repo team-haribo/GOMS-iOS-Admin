@@ -13,6 +13,10 @@ import Then
 
 class CustomSegmentedControl: UIStackView {
     
+    var buttonTappedHandler: ((Int) -> Void)?
+    
+    var selectedIndex: Int = -1
+    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -26,8 +30,9 @@ class CustomSegmentedControl: UIStackView {
         distribution = .fillEqually
         spacing = 26
         
-        for title in items {
+        for (index, title) in items.enumerated() {
             let segmentButton = UIButton().then {
+                $0.tag = index
                 $0.setTitle(title, for: .normal)
                 $0.setTitleColor(GOMSAdminAsset.subColor.color, for: .normal)
                 $0.setTitleColor(.white, for: .selected)
@@ -50,6 +55,9 @@ class CustomSegmentedControl: UIStackView {
     }
     
     @objc private func buttonTapped(_ sender: UIButton) {
+        selectedIndex = sender.tag
+        buttonTappedHandler?(selectedIndex)
+        
         for button in buttons {
             button.isSelected = (button == sender)
             button.backgroundColor = button.isSelected ? GOMSAdminAsset.mainColor.color : .white
