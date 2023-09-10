@@ -21,6 +21,7 @@ enum GOMSAdminStep: Step {
     case studentManagementIsRequired
     case searchButtonIsRequired
     case editIconIsRequired(accountIdx: UUID)
+    case editModalDismiss
     
     //MARK: Alert
     case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])

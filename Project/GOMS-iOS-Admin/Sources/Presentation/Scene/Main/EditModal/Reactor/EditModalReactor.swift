@@ -37,6 +37,7 @@ class EditModalReactor: Reactor, Stepper{
     enum Action {
         case updateRole(authority: String)
         case addToBlackList
+        case dismissEditModal
     }
     
     enum Mutation {
@@ -51,7 +52,6 @@ class EditModalReactor: Reactor, Stepper{
     init(accountIdx: UUID) {
         self.initialState = State()
         self.accountIdx = accountIdx
-        //print(accountIdx)
     }
 }
 
@@ -63,6 +63,8 @@ extension EditModalReactor {
             return updateRole(authority: authority)
         case .addToBlackList:
             return addToBlackList()
+        case .dismissEditModal:
+            return dismissEditModal()
         }
     }
 }
@@ -147,6 +149,11 @@ private extension EditModalReactor {
             }
             return Disposables.create()
         }
+    }
+    
+    func dismissEditModal() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.editModalDismiss)
+        return .empty()
     }
 }
 

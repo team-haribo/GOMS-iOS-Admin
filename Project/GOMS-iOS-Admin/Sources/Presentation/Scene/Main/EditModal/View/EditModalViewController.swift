@@ -100,18 +100,25 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
     
     // MARK: - Reactor
     
+    override func bindView(reactor: EditModalReactor) {
+        editButton.rx.tap
+            .flatMapLatest { [weak self] _ -> Observable<EditModalReactor.Action> in
+                guard let self = self else { return .empty() }
+                if self.editedUserIsBlackList ?? Bool() {
+                    return .just(.addToBlackList)
+                } else {
+                    return .just(.updateRole(authority: editedUserAuthority ?? ""))
+                }
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
     override func bindAction(reactor: EditModalReactor) {
         editButton.rx.tap
-                .flatMapLatest { [weak self] _ -> Observable<EditModalReactor.Action> in
-                    guard let self = self else { return .empty() }
-                    if self.editedUserIsBlackList ?? Bool() {
-                        return .just(.addToBlackList)
-                    } else {
-                        return .just(.updateRole(authority: editedUserAuthority ?? ""))
-                    }
-                }
-                .bind(to: reactor.action)
-                .disposed(by: disposeBag)
+            .map { EditModalReactor.Action.dismissEditModal }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 

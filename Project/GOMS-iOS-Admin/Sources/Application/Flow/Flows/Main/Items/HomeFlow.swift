@@ -59,6 +59,9 @@ class HomeFlow: Flow {
         case let .editIconIsRequired(accountIdx):
             return coordinateToEditModal(accountIdx: accountIdx)
             
+        case .editModalDismiss:
+            return dismissEditModal()
+            
         default:
             return .none
         }
@@ -127,6 +130,13 @@ class HomeFlow: Flow {
         }
         self.rootViewController.topViewController?.present(alert, animated: true)
         return .none
+    }
+    
+    private func dismissEditModal() -> FlowContributors {
+        let vm = StudentInfoReactor()
+        let vc = StudentInfoViewController(vm)
+        self.rootViewController.dismiss(animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
 }
 
