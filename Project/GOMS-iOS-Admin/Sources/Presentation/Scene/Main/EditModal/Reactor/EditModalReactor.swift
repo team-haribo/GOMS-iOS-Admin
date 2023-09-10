@@ -35,7 +35,7 @@ class EditModalReactor: Reactor, Stepper{
     // MARK: - Reactor
     
     enum Action {
-        case editButtonDidTab(authority: String)
+        case updateRole(authority: String)
         case addToBlackList
     }
     
@@ -59,7 +59,7 @@ class EditModalReactor: Reactor, Stepper{
 extension EditModalReactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case let .editButtonDidTab(authority):
+        case let .updateRole(authority):
             return updateRole(authority: authority)
         case .addToBlackList:
             return addToBlackList()

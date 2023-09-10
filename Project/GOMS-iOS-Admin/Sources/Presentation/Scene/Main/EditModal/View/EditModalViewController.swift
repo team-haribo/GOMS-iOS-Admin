@@ -107,7 +107,7 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
                     if self.editedUserIsBlackList ?? Bool() {
                         return .just(.addToBlackList)
                     } else {
-                        return .just(.editButtonDidTab(authority: editedUserAuthority ?? ""))
+                        return .just(.updateRole(authority: editedUserAuthority ?? ""))
                     }
                 }
                 .bind(to: reactor.action)
