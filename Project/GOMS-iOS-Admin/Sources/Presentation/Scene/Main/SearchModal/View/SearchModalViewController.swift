@@ -16,6 +16,25 @@ import RxCocoa
 
 class SearchModalViewController: BaseViewController<SearchModalReactor> {
     
+    private var searchAuthority: String? = ""
+    private var searchBlackList: Bool?
+    private var searchGrade: Int?
+    private var searchClassNum: Int?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        roleSegmentedControl.buttonTappedHandler = { [weak self] selectedIndex in
+            self?.roleSegChanged(selectedIndex: self?.roleSegmentedControl.selectedIndex ?? 0)
+        }
+        gradeSegmentedControl.buttonTappedHandler = { [weak self] selectedIndex in
+            self?.gradeSegChanged(selectedIndex: self?.gradeSegmentedControl.selectedIndex ?? 0)
+        }
+        classNumSegmentedControl.buttonTappedHandler = { [weak self] selectedIndex in
+            self?.classNumSegChanged(selectedIndex: self?.classNumSegmentedControl.selectedIndex ?? 0)
+        }
+    }
+    
     private let searchTextField = UITextField().then {
         let imageView = UIImageView(image: UIImage(named: "Search"))
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: imageView.frame.size.width + 20, height: imageView.frame.size.height))
@@ -110,6 +129,47 @@ class SearchModalViewController: BaseViewController<SearchModalReactor> {
             }
     }
     
+    private func roleSegChanged(selectedIndex: Int) {
+        switch selectedIndex {
+        case 0:
+            searchAuthority = "ROLE_STUDENT"
+        case 1:
+            searchAuthority = "ROLE_STUDENT_COUNCIL"
+        case 2:
+            searchBlackList = true
+        default:
+            searchAuthority = ""
+        }
+    }
+
+    private func gradeSegChanged(selectedIndex: Int) {
+        switch selectedIndex {
+        case 0:
+            searchGrade = 1
+        case 1:
+            searchGrade = 2
+        case 2:
+            searchGrade = 3
+        default:
+            searchGrade = nil
+        }
+    }
+
+    private func classNumSegChanged(selectedIndex: Int) {
+        switch selectedIndex {
+        case 0:
+            searchClassNum = 1
+        case 1:
+            searchClassNum = 2
+        case 2:
+            searchClassNum = 3
+        case 3:
+            searchClassNum = 4
+        default:
+            searchGrade = nil
+        }
+    }
+    
     override func setLayout() {
         searchTextField.snp.makeConstraints {
             $0.top.equalToSuperview().offset(30)
@@ -159,6 +219,11 @@ class SearchModalViewController: BaseViewController<SearchModalReactor> {
             .map { SearchModalReactor.Action.resetButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        
+        searchButton.rx.tap
+            .map { SearchModalReactor.Action.searchButtonDidTap(grade: self.searchGrade, classNum: self.searchClassNum, name: self.searchTextField.text, isBlackList: self.searchBlackList, authority: self.searchAuthority) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     override func bindState(reactor: SearchModalReactor) {
@@ -172,7 +237,11 @@ class SearchModalViewController: BaseViewController<SearchModalReactor> {
     }
     
     private func resetSegmentedControls() {
-        //print("resetSegmentedControls() 호출 확인")
+        searchAuthority = ""
+        searchBlackList = nil
+        searchGrade = nil
+        searchClassNum = nil
+        
         roleSegmentedControl.resetButtons()
         gradeSegmentedControl.resetButtons()
         classNumSegmentedControl.resetButtons()
