@@ -224,6 +224,10 @@ class SearchModalViewController: BaseViewController<SearchModalReactor> {
             .map { SearchModalReactor.Action.searchButtonDidTap(grade: self.searchGrade, classNum: self.searchClassNum, name: self.searchTextField.text, isBlackList: self.searchBlackList, authority: self.searchAuthority) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+        searchButton.rx.tap
+            .map { SearchModalReactor.Action.dismissSearchModal }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
     
     override func bindState(reactor: SearchModalReactor) {

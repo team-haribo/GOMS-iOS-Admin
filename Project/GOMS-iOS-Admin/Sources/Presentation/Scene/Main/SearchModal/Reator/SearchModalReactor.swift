@@ -32,6 +32,7 @@ class SearchModalReactor: Reactor, Stepper{
     enum Action {
         case resetButtonDidTap
         case searchButtonDidTap(grade: Int?, classNum: Int?, name: String?, isBlackList: Bool?, authority: String?)
+        case dismissSearchModal
     }
     
     enum Mutation {
@@ -60,6 +61,8 @@ extension SearchModalReactor {
             ])
         case let .searchButtonDidTap(grade, classNum, name, isBlackList, authority):
             return searchStudent(grade: grade, classNum: classNum, name: name, isBlackList: isBlackList, authority: authority)
+        case .dismissSearchModal:
+            return dismissSearchModal()
         }
     }
 }
@@ -113,6 +116,11 @@ private extension SearchModalReactor {
             }
             return Disposables.create()
         }
+    }
+    
+    func dismissSearchModal() -> Observable<Mutation> {
+        self.steps.accept(GOMSAdminStep.searchModalDismiss)
+        return .empty()
     }
 }
 
