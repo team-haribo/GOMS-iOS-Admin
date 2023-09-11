@@ -57,7 +57,13 @@ extension StudentCouncilServices: TargetType {
             return .requestJSONEncodable(param)
         case let .search(_, grade, classNum, name, isBlackList, authority):
             return .requestParameters(
-                parameters: ["grade" : grade ?? "", "classNum" : classNum ?? "", "name" : name ?? "", "isBlackList" : isBlackList ?? "", "authority" : authority ?? ""],
+                parameters: [
+                    "grade" : grade ?? "",
+                    "classNum" : classNum ?? "",
+                    "name" : name ?? "",
+                    "isBlackList" : isBlackList ?? "",
+                    "authority" : authority ?? ""
+                ],
                 encoding: URLEncoding.queryString)
         }
     }
