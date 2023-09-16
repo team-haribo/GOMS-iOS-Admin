@@ -29,14 +29,17 @@ class StudentInfoReactor: Reactor, Stepper{
         case searchButtonDidTap
         case fetchStudentList
         case editIconDidTap(accountIdx: UUID)
+        case updateSearchResults(results: [SearchResponse])
     }
     
     enum Mutation {
         case fetchStudentList(studentList: [StudentListResponse])
+        case updateSearchResult(searchResult: [SearchResponse])
     }
     
     struct State {
         var studentList: [StudentListResponse] = []
+        var searchResult: [SearchResponse] = []
     }
     
     // MARK: - Init
@@ -55,6 +58,8 @@ extension StudentInfoReactor {
             return fetchStudentList()
         case let .editIconDidTap(accountIdx):
             return editIconDidTap(accountIdx: accountIdx)
+        case let .updateSearchResults(searchResult):
+            return .just(.updateSearchResult(searchResult: searchResult))
         }
     }
 }
@@ -66,6 +71,8 @@ extension StudentInfoReactor {
         switch mutation {
         case let .fetchStudentList(studentList):
             newState.studentList = studentList
+        case let .updateSearchResult(searchResult):
+            newState.searchResult = searchResult
         }
         return newState
     }
@@ -86,7 +93,7 @@ private extension StudentInfoReactor {
                 case let .success(res):
                     do {
                         self.studentList = try res.map([StudentListResponse].self)
-                        //print("Fetched student list: \(self.studentList)")
+                        print("Fetched student list: \(self.studentList)")
                     }catch(let err) {
                         print(String(describing: err))
                     }

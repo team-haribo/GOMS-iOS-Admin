@@ -27,6 +27,10 @@ class SearchModalReactor: Reactor, Stepper{
     
     lazy var accessToken = "Bearer " + (keychain.read(key: Const.KeychainKey.accessToken) ?? "")
     
+    let studentInfoReactor = StudentInfoReactor.shared
+    
+    var searchResult: [SearchResponse] = []
+    
     // MARK: - Reactor
     
     enum Action {
@@ -89,6 +93,12 @@ private extension SearchModalReactor {
             self.searchModalProvider.request(.search(authorization: self.accessToken, grade: grade, classNum: classNum, name: name, isBlackList: isBlackList, authority: authority)) { response in
                 switch response {
                 case let .success(result):
+                    do {
+                        self.searchResult = try result.map([SearchResponse].self)
+                        print("Fetched student list: \(self.searchResult)")
+                    }catch(let err) {
+                        print(String(describing: err))
+                    }
                     let statusCode = result.statusCode
                     print(self.accessToken)
                     switch statusCode{

@@ -16,6 +16,8 @@ import RxCocoa
 
 class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     
+    let searchModalReactor = SearchModalReactor()
+    
     override func viewDidLoad() {
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.font : GOMSAdminFontFamily.SFProText.medium.font(size: 16)
