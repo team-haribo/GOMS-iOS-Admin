@@ -29,7 +29,7 @@ class SearchModalReactor: Reactor, Stepper{
     
     let studentInfoReactor = StudentInfoReactor.shared
     
-    var searchResult: [SearchResponse] = []
+    var searchResult: [StudentListResponse] = []
     
     // MARK: - Reactor
     
@@ -94,8 +94,9 @@ private extension SearchModalReactor {
                 switch response {
                 case let .success(result):
                     do {
-                        self.searchResult = try result.map([SearchResponse].self)
+                        self.searchResult = try result.map([StudentListResponse].self)
                         print("Fetched student list: \(self.searchResult)")
+                        StudentInfoReactor.shared.action.onNext(.updateSearchResults(results: self.searchResult))
                     }catch(let err) {
                         print(String(describing: err))
                     }

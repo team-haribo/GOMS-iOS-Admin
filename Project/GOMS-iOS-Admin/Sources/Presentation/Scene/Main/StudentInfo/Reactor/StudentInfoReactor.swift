@@ -16,6 +16,8 @@ class StudentInfoReactor: Reactor, Stepper{
     let studentInfoProvider = MoyaProvider<StudentCouncilServices>(plugins: [NetworkLoggerPlugin()])
     
     var studentList: [StudentListResponse] = []
+    
+    var searchResult: [StudentListResponse] = []
         
     let keychain = Keychain()
     
@@ -29,17 +31,17 @@ class StudentInfoReactor: Reactor, Stepper{
         case searchButtonDidTap
         case fetchStudentList
         case editIconDidTap(accountIdx: UUID)
-        case updateSearchResults(results: [SearchResponse])
+        case updateSearchResults(results: [StudentListResponse])
     }
     
     enum Mutation {
         case fetchStudentList(studentList: [StudentListResponse])
-        case updateSearchResult(searchResult: [SearchResponse])
+        case updateSearchResult(searchResult: [StudentListResponse])
     }
     
     struct State {
         var studentList: [StudentListResponse] = []
-        var searchResult: [SearchResponse] = []
+        var searchResult: [StudentListResponse] = []
     }
     
     // MARK: - Init
@@ -73,6 +75,7 @@ extension StudentInfoReactor {
             newState.studentList = studentList
         case let .updateSearchResult(searchResult):
             newState.searchResult = searchResult
+            print("StudentInfoReactor - Updated search results: \(searchResult)")
         }
         return newState
     }

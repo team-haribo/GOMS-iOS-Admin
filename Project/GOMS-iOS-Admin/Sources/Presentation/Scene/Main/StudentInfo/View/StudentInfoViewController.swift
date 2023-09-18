@@ -25,6 +25,7 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         self.navigationItem.title = "학생 정보 수정"
         super.viewDidLoad()
         
+        fetchStudent()
         studentInfoCollectionView.collectionViewLayout = layout
     }
     
@@ -125,6 +126,13 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         }
     }
     
+    private func fetchStudent() {
+        reactor.action.onNext(.fetchStudentList)
+        DispatchQueue.main.async { [self] in
+            studentInfoCollectionView.reloadData()
+        }
+    }
+    
     // MARK: - Reactor
     
     override func bindView(reactor: StudentInfoReactor) {
@@ -134,16 +142,22 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
             .disposed(by: disposeBag)
     }
     
-    override func bindAction(reactor: StudentInfoReactor) {
-        self.rx.methodInvoked(#selector(viewWillAppear))
-            .map { _ in StudentInfoReactor.Action.fetchStudentList }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-    }
+//    override func bindAction(reactor: StudentInfoReactor) {
+//        self.rx.methodInvoked(#selector(viewWillAppear))
+//            .map { _ in StudentInfoReactor.Action.fetchStudentList }
+//            .bind(to: reactor.action)
+//            .disposed(by: disposeBag)
+//    }
     
     override func bindState(reactor: StudentInfoReactor) {
         reactor.state
-            .map { $0.studentList }
+            .map { [weak self] state in
+                if !state.searchResult.isEmpty {
+                    return state.searchResult
+                } else {
+                    return state.studentList
+                }
+            }
             .bind(
                 to: studentInfoCollectionView.rx.items(cellIdentifier: "studentCell", cellType: StudentInfoCollectionViewCell.self)
             ) { ip, item, cell in
