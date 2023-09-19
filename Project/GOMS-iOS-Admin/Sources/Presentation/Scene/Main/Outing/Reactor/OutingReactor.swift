@@ -37,7 +37,7 @@ class OutingReactor: Reactor, Stepper {
         case fetchStudentList(studentList: [StudentListResponse])
     }
     
-    struct OutingItem {
+    public struct OutingItem {
         var id: Int
         var name: String
     }
@@ -99,6 +99,7 @@ private extension OutingReactor {
                 case let .success(res):
                     do {
                         self.studentList = try res.map([StudentListResponse].self)
+                        print("outingList: \(self.studentList)")
                     }catch(let err) {
                         print(String(describing: err))
                     }
