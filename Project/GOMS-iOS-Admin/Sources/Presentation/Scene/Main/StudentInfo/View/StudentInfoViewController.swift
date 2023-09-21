@@ -25,7 +25,8 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         self.navigationItem.title = "학생 정보 수정"
         super.viewDidLoad()
         
-        fetchStudent()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleSearchResult(_:)), name: NSNotification.Name(rawValue: "SearchResultNotification"), object: nil)
+        
         studentInfoCollectionView.collectionViewLayout = layout
     }
     
@@ -59,7 +60,7 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         $0.image = UIImage(named: "noResultImage")
         $0.isHidden = true
     }
-
+    
     private let noResultText = UILabel().then {
         $0.text = "검색 결과를 찾을 수 없어요!"
         $0.textColor = GOMSAdminAsset.subColor.color
@@ -97,8 +98,8 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
             studentInfoCollectionView,
             noResultImage,
             noResultText].forEach {
-            view.addSubview($0)
-        }
+                view.addSubview($0)
+            }
     }
     
     override func setLayout() {
@@ -126,10 +127,11 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         }
     }
     
-    private func fetchStudent() {
-        reactor.action.onNext(.fetchStudentList)
-        DispatchQueue.main.async { [self] in
-            studentInfoCollectionView.reloadData()
+    @objc private func handleSearchResult(_ notification: Notification) {
+        if let searchResult = notification.object as? [StudentListResponse] {
+            DispatchQueue.main.async { [weak self] in
+                self?.reactor.action.onNext(.updateSearchResults(results: searchResult))
+            }
         }
     }
     
@@ -142,12 +144,12 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
             .disposed(by: disposeBag)
     }
     
-//    override func bindAction(reactor: StudentInfoReactor) {
-//        self.rx.methodInvoked(#selector(viewWillAppear))
-//            .map { _ in StudentInfoReactor.Action.fetchStudentList }
-//            .bind(to: reactor.action)
-//            .disposed(by: disposeBag)
-//    }
+    override func bindAction(reactor: StudentInfoReactor) {
+        self.rx.methodInvoked(#selector(viewWillAppear))
+            .map { _ in StudentInfoReactor.Action.fetchStudentList }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
     
     override func bindState(reactor: StudentInfoReactor) {
         reactor.state

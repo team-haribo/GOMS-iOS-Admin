@@ -96,7 +96,7 @@ private extension SearchModalReactor {
                     do {
                         self.searchResult = try result.map([StudentListResponse].self)
                         print("Fetched student list: \(self.searchResult)")
-                        StudentInfoReactor.shared.action.onNext(.updateSearchResults(results: self.searchResult))
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "SearchResultNotification"), object: self.searchResult)
                     }catch(let err) {
                         print(String(describing: err))
                     }
