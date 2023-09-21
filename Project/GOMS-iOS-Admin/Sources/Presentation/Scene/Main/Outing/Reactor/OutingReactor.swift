@@ -37,7 +37,7 @@ class OutingReactor: Reactor, Stepper {
         case fetchStudentList(studentList: [StudentListResponse])
     }
     
-    public struct OutingItem {
+   struct OutingItem {
         var id: Int
         var name: String
     }
