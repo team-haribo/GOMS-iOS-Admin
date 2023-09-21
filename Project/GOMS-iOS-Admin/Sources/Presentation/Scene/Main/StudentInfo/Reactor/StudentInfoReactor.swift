@@ -75,7 +75,6 @@ extension StudentInfoReactor {
             newState.studentList = studentList
         case let .updateSearchResult(searchResult):
             newState.searchResult = searchResult
-            print("StudentInfoReactor - Updated search results: \(searchResult)")
         }
         return newState
     }
@@ -96,7 +95,7 @@ private extension StudentInfoReactor {
                 case let .success(res):
                     do {
                         self.studentList = try res.map([StudentListResponse].self)
-                        print("Fetched student list: \(self.studentList)")
+                        //print("Fetched student list: \(self.studentList)")
                     }catch(let err) {
                         print(String(describing: err))
                     }

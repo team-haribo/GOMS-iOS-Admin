@@ -18,6 +18,8 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     
     let searchModalReactor = SearchModalReactor()
     
+    private var hasSearchedBefore = false
+    
     override func viewDidLoad() {
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.font : GOMSAdminFontFamily.SFProText.medium.font(size: 16)
@@ -139,6 +141,9 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     
     override func bindView(reactor: StudentInfoReactor) {
         searchButton.rx.tap
+            .do(onNext: { [weak self] in
+                self?.hasSearchedBefore = true
+            })
             .map { StudentInfoReactor.Action.searchButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -154,10 +159,21 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     override func bindState(reactor: StudentInfoReactor) {
         reactor.state
             .map { [weak self] state in
-                if !state.searchResult.isEmpty {
+                if self?.hasSearchedBefore == false {
+                    self?.studentInfoCollectionView.isHidden = false
+                    self?.noResultImage.isHidden = true
+                    self?.noResultText.isHidden = true
+                    return state.studentList
+                } else if state.searchResult.isEmpty {
+                    self?.studentInfoCollectionView.isHidden = true
+                    self?.noResultImage.isHidden = false
+                    self?.noResultText.isHidden = false
                     return state.searchResult
                 } else {
-                    return state.studentList
+                    self?.studentInfoCollectionView.isHidden = false
+                    self?.noResultImage.isHidden = true
+                    self?.noResultText.isHidden = true
+                    return state.searchResult
                 }
             }
             .bind(
