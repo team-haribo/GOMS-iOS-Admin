@@ -24,19 +24,16 @@ class OutingCollectionViewCell: UICollectionViewCell {
     }
     
     let userName = UILabel().then {
-        $0.text = "김주은"
         $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 16)
         $0.textColor = .black
     }
     
     let userNum = UILabel().then {
-        $0.text = "2학년 1반 2번"
         $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 14)
         $0.textColor = UIColor(red: 0.58, green: 0.58, blue: 0.58, alpha: 1.0)
     }
     
     let createTime = UILabel().then {
-        $0.text = "19:00"
         $0.font = GOMSAdminFontFamily.SFProText.regular.font(size: 12)
         $0.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
     }

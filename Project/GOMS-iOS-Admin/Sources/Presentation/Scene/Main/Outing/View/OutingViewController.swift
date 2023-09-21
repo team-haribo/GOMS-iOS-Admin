@@ -57,16 +57,14 @@ class OutingViewController: BaseViewController<OutingReactor> {
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         self.navigationItem.rightBarButtonItem()
         self.navigationItem.leftLogoImage()
-        
-        outingCollectionView.delegate = self
-        outingCollectionView.dataSource = self
+
         outingCollectionView.register(OutingCollectionViewCell.self, forCellWithReuseIdentifier: OutingCollectionViewCell.identifier)
 
         outingCollectionView.collectionViewLayout = layout
-        
-        super.viewDidLoad()
     }
     
     override func addView() {
@@ -100,7 +98,7 @@ class OutingViewController: BaseViewController<OutingReactor> {
             $0.bottom.equalToSuperview()
         }
     }
-    
+
     // MARK: - Reactor
     
     override func bindView(reactor: OutingReactor) {
@@ -116,23 +114,28 @@ class OutingViewController: BaseViewController<OutingReactor> {
             .map { OutingReactor.Action.profileButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        }
-}
-
-extension OutingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return reactor.currentState.searchResults.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "outingCell", for: indexPath) as? OutingCollectionViewCell else {
-            fatalError("Could not dequeue cell")
+    override func bindState(reactor: OutingReactor) {
+        reactor.state
+            .map { $0.studentList }
+            .bind(
+                to: outingCollectionView.rx.items(cellIdentifier: "outingCell", cellType: OutingCollectionViewCell.self)
+            ) { ip, item, cell in
+                cell.backgroundColor = .white
+                cell.layer.cornerRadius = 10
+                cell.layer.applySketchShadow(
+                    color: UIColor.black,
+                    alpha: 0.1,
+                    x: 0,
+                    y: 2,
+                    blur: 8,
+                    spread: 0
+                )
+                let url = URL(string: item.profileUrl ?? "")
+                cell.userProfile.kf.setImage(with: url, placeholder: UIImage(named: "userDummyImage"))
+                cell.userName.text = item.name
+                cell.userNum.text = "\(item.studentNum.grade)학년 \(item.studentNum.classNum)반 \(item.studentNum.number)번"
+            }.disposed(by: disposeBag)
         }
-        
-//        let outingItem = reactor.currentState.searchResults[indexPath.item]
-//        cell.configure(with: outingItem)
-        return cell
-    }
-    
-    
 }
