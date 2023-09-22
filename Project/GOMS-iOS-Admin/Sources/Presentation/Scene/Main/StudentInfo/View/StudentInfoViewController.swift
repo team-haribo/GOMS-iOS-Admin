@@ -16,12 +16,18 @@ import RxCocoa
 
 class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     
+    let searchModalReactor = SearchModalReactor()
+    
+    private var hasSearchedBefore = false
+    
     override func viewDidLoad() {
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedString.Key.font : GOMSAdminFontFamily.SFProText.medium.font(size: 16)
         ]
         self.navigationItem.title = "학생 정보 수정"
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleSearchResult(_:)), name: NSNotification.Name(rawValue: "SearchResultNotification"), object: nil)
         
         studentInfoCollectionView.collectionViewLayout = layout
     }
@@ -56,7 +62,7 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         $0.image = UIImage(named: "noResultImage")
         $0.isHidden = true
     }
-
+    
     private let noResultText = UILabel().then {
         $0.text = "검색 결과를 찾을 수 없어요!"
         $0.textColor = GOMSAdminAsset.subColor.color
@@ -94,8 +100,8 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
             studentInfoCollectionView,
             noResultImage,
             noResultText].forEach {
-            view.addSubview($0)
-        }
+                view.addSubview($0)
+            }
     }
     
     override func setLayout() {
@@ -123,10 +129,21 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
         }
     }
     
+    @objc private func handleSearchResult(_ notification: Notification) {
+        if let searchResult = notification.object as? [StudentListResponse] {
+            DispatchQueue.main.async { [weak self] in
+                self?.reactor.action.onNext(.updateSearchResults(results: searchResult))
+            }
+        }
+    }
+    
     // MARK: - Reactor
     
     override func bindView(reactor: StudentInfoReactor) {
         searchButton.rx.tap
+            .do(onNext: { [weak self] in
+                self?.hasSearchedBefore = true
+            })
             .map { StudentInfoReactor.Action.searchButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -141,7 +158,24 @@ class StudentInfoViewController: BaseViewController<StudentInfoReactor> {
     
     override func bindState(reactor: StudentInfoReactor) {
         reactor.state
-            .map { $0.studentList }
+            .map { [weak self] state in
+                if self?.hasSearchedBefore == false {
+                    self?.studentInfoCollectionView.isHidden = false
+                    self?.noResultImage.isHidden = true
+                    self?.noResultText.isHidden = true
+                    return state.studentList
+                } else if state.searchResult.isEmpty {
+                    self?.studentInfoCollectionView.isHidden = true
+                    self?.noResultImage.isHidden = false
+                    self?.noResultText.isHidden = false
+                    return state.searchResult
+                } else {
+                    self?.studentInfoCollectionView.isHidden = false
+                    self?.noResultImage.isHidden = true
+                    self?.noResultText.isHidden = true
+                    return state.searchResult
+                }
+            }
             .bind(
                 to: studentInfoCollectionView.rx.items(cellIdentifier: "studentCell", cellType: StudentInfoCollectionViewCell.self)
             ) { ip, item, cell in

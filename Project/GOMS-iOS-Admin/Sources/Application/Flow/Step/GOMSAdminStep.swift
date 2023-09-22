@@ -22,6 +22,7 @@ enum GOMSAdminStep: Step {
     case searchButtonIsRequired
     case editIconIsRequired(accountIdx: UUID)
     case editModalDismiss
+    case searchModalDismiss
     
     //MARK: Alert
     case alert(title: String?, message: String?, style: UIAlertController.Style, actions: [UIAlertAction])

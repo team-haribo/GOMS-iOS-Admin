@@ -62,6 +62,9 @@ class HomeFlow: Flow {
         case .editModalDismiss:
             return dismissEditModal()
             
+        case .searchModalDismiss:
+            return dismissSearchModal()
+            
         default:
             return .none
         }
@@ -133,6 +136,13 @@ class HomeFlow: Flow {
     }
     
     private func dismissEditModal() -> FlowContributors {
+        let vm = StudentInfoReactor()
+        let vc = StudentInfoViewController(vm)
+        self.rootViewController.dismiss(animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func dismissSearchModal() -> FlowContributors {
         let vm = StudentInfoReactor()
         let vc = StudentInfoViewController(vm)
         self.rootViewController.dismiss(animated: true)
