@@ -104,10 +104,14 @@ class EditModalViewController: BaseViewController<EditModalReactor> {
         editButton.rx.tap
             .flatMapLatest { [weak self] _ -> Observable<EditModalReactor.Action> in
                 guard let self = self else { return .empty() }
-                if self.editedUserIsBlackList ?? Bool() {
+                if self.editedUserIsBlackList ?? false {
                     return .just(.addToBlackList)
-                } else {
-                    return .just(.updateRole(authority: editedUserAuthority ?? ""))
+                }
+                else {
+                    return .concat([
+                        .just(.deleteBlackList),
+                        .just(.updateRole(authority: editedUserAuthority ?? ""))
+                    ])
                 }
             }
             .bind(to: reactor.action)
