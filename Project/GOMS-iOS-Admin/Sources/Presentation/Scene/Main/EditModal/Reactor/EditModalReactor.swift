@@ -166,6 +166,15 @@ private extension EditModalReactor {
                         print("success")
                     case 401:
                         self.gomsAdminRefreshToken.tokenReissuance()
+                        self.steps.accept(
+                            GOMSAdminStep.failureAlert(
+                                title: "오류",
+                                message: "다시 한 번 작업을 실행해주세요",
+                                action: [.init(title: "확인",style: .default) { _ in
+                                    self.steps.accept(GOMSAdminStep.introIsRequired)}
+                                ]
+                            )
+                        )
                     case 403:
                         self.steps.accept(
                             GOMSAdminStep.failureAlert(
